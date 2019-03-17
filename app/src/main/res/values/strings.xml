@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PDF Scanner</string>
+    <string name="app_name">Clean Scan</string>
     <string name="base_storage_path">PDF Scanner/data/</string>
 
     <string name="scan_shortcut_short_label">New Document</string>
