@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
 
                 View itemView = viewHolder.itemView;
 
-                final ColorDrawable background = new ColorDrawable(Color.RED);
+                final ColorDrawable background = new ColorDrawable(Color.parseColor("#ef9a9a"));
                 background.setBounds(
                         itemView.getRight() + Float.valueOf(dX).intValue(),
                         itemView.getTop(),

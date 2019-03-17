@@ -2,14 +2,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/black"
+    android:background="@android:color/white"
     android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/topBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical">
+        android:layout_gravity="center_vertical"
+        android:background="@color/colorPrimary">
 
         <Button
             android:id="@+id/original"
@@ -19,7 +20,8 @@
             android:background="@android:color/transparent"
             android:drawableTop="@drawable/ic_image"
             android:text="Original"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"
+            android:padding="10dp"/>
 
         <Button
             android:id="@+id/magicColor"
@@ -29,8 +31,9 @@
             android:background="@android:color/transparent"
             android:drawableTop="@drawable/ic_enhamce_image"
             android:singleLine="true"
-            android:text="Magic color"
-            android:textColor="@android:color/white" />
+            android:text="Auto"
+            android:textColor="@android:color/white"
+            android:padding="10dp" />
 
         <Button
             android:id="@+id/grayMode"
@@ -40,8 +43,9 @@
             android:background="@android:color/transparent"
             android:drawableTop="@drawable/ic_gray"
             android:singleLine="true"
-            android:text="Gray Mode"
-            android:textColor="@android:color/white" />
+            android:text="Gray"
+            android:textColor="@android:color/white"
+            android:padding="10dp" />
 
         <Button
             android:id="@+id/BWMode"
@@ -51,36 +55,45 @@
             android:background="@android:color/transparent"
             android:drawableTop="@drawable/ic_black_and_white"
             android:singleLine="true"
-            android:text="B and W"
-            android:textColor="@android:color/white" />
+            android:text="B/W"
+            android:textColor="@android:color/white"
+            android:padding="10dp" />
     </LinearLayout>
-
-    <Button
-        android:id="@+id/doneButton"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@color/bottom_background_color"
-        android:orientation="horizontal"
-        android:padding="@dimen/bottom_bar_padding"
-        android:text="@string/done" />
 
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/doneButton"
         android:layout_below="@id/topBar"
         android:layout_gravity="center"
         android:layout_margin="@dimen/scanPadding">
 
-        <ImageView
-            android:id="@+id/scannedImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="@dimen/scanPadding" />
-    </FrameLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
+            <Button
+                android:id="@+id/doneButton"
+                style="@style/Widget.AppCompat.Button"
+                android:layout_width="175dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/capsule_bg"
+                android:orientation="horizontal"
+                android:padding="@dimen/bottom_bar_padding"
+                android:text="@string/done"
+                android:textColor="@android:color/white"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"
+                android:drawableStart="@drawable/ic_outline_save_24px"></Button>
+
+            <ImageView
+                android:id="@+id/scannedImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/scanPadding" />
+        </RelativeLayout>
+    </FrameLayout>
 
 </RelativeLayout>

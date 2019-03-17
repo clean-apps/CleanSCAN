@@ -2,18 +2,23 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/black"
+    android:background="@android:color/white"
     android:orientation="vertical">
 
     <Button
         android:id="@+id/scanButton"
-        android:layout_width="fill_parent"
+        style="@style/Widget.AppCompat.Button"
+        android:layout_width="175dp"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@color/bottom_background_color"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/capsule_bg"
         android:orientation="horizontal"
         android:padding="@dimen/bottom_bar_padding"
-        android:text="@string/scan"></Button>
+        android:text="@string/scan"
+        android:textColor="@android:color/white"
+        android:layout_centerHorizontal="true"
+        android:drawableStart="@drawable/ic_outline_navigate_next_24px"></Button>
 
     <FrameLayout
         android:layout_width="match_parent"
