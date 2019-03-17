@@ -44,7 +44,6 @@ import java.util.Date;
 public class MainActivity extends AppCompatActivity {
 
     public static final int RUNTIME_PERMISSION_CODE = 7;
-    private final String baseDirectory = "PDF Scanner/";
     private FLAdapter fileAdapter;
     final Context c = this;
 
@@ -59,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
         AndroidRuntimePermission();
 
         RecyclerView recyclerView = findViewById(R.id.rw);
+        String baseDirectory =  getApplicationContext().getString(R.string.base_storage_path);
 
         fileAdapter = new FLAdapter(baseDirectory);
         recyclerView.setAdapter( fileAdapter );
@@ -123,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void saveBitmap( final Bitmap bitmap ){
 
+            String baseDirectory =  getApplicationContext().getString(R.string.base_storage_path);
             final File sd = Environment.getExternalStorageDirectory();
             File scanImgDirectory = new File(sd, baseDirectory);
             if (!scanImgDirectory.exists()) {
@@ -145,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
                                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy_hh-mm-ss");
                                 String timestamp = simpleDateFormat.format(new Date());
 
+                                String baseDirectory =  getApplicationContext().getString(R.string.base_storage_path);
                                 String filename = baseDirectory + fileNameText.getText().toString() + "#" + timestamp + ".png";
                                 File dest = new File(sd, filename);
 
