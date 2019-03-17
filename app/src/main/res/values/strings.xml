@@ -1,9 +1,12 @@
 <resources>
-    <string name="app_name">Clean PDF Scanner</string>
-    <string name="base_storage_path">PDF Scanner/</string>
+    <string name="app_name">PDF Scanner</string>
+    <string name="base_storage_path">PDF Scanner/data/</string>
 
     <string name="scan_shortcut_short_label">New Document</string>
     <string name="scan_shortcut_long_label">Scan A New Document</string>
     <string name="scan_disabled_message">Scanning Disabled</string>
+
+    <string name="menu_delete">Delete</string>
+    <string name="menu_rename">Rename</string>
 
 </resources>

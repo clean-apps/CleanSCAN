@@ -131,10 +131,14 @@ public class PickImageFragment extends Fragment {
 
     private File createImageFile() {
         clearTempImages();
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new
-                Date());
-        File file = new File(ScanConstants.IMAGE_PATH, "IMG_" + timeStamp +
-                ".jpg");
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+
+        File basePath = new File(ScanConstants.IMAGE_PATH);
+        if(! basePath.exists() ){
+            basePath.mkdirs();
+        }
+
+        File file = new File(ScanConstants.IMAGE_PATH, "IMG_" + timeStamp +".jpg");
         fileUri = Uri.fromFile(file);
         return file;
     }
