@@ -1,5 +1,10 @@
 package com.babanomania.pdfscanner.FLHandlers;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.icu.text.SimpleDateFormat;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v7.view.ActionMode;
@@ -10,13 +15,18 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.babanomania.pdfscanner.R;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 public class FLAdapter extends RecyclerView.Adapter<FLViewHolder> {
@@ -27,6 +37,7 @@ public class FLAdapter extends RecyclerView.Adapter<FLViewHolder> {
     public boolean multiSelect = false;
     public List<File> selectedItems = new ArrayList<>();
     protected ActionMode mActionMode;
+    final Context c;
 
     private ActionMode.Callback actionModeCallbacks = new ActionMode.Callback() {
 
@@ -57,7 +68,7 @@ public class FLAdapter extends RecyclerView.Adapter<FLViewHolder> {
         }
 
         @Override
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+        public boolean onActionItemClicked(final ActionMode mode, final MenuItem item) {
 
             switch (item.getItemId()) {
                 case R.id.menu_delete:
@@ -67,13 +78,35 @@ public class FLAdapter extends RecyclerView.Adapter<FLViewHolder> {
                     }
 
                     mode.finish();
-
                     return true;
 
                 case R.id.menu_edit:
-                    //TODO rename file
-                    return false;
 
+                    final File itemToRename = selectedItems.get(0);
+                    String originalName = itemToRename.getName();
+                    final String fileNamePrefix = originalName.split("#")[0];
+                    final String fileNameSuffix = originalName.split("#")[1];
+
+                    DialogUtil.askUserFilaname( c, fileNamePrefix, new DialogUtilCallback() {
+
+                        @Override
+                        public void onSave(String textValue) {
+
+                            final File sd = Environment.getExternalStorageDirectory();
+                            String baseDirectory = c.getString(R.string.base_storage_path);
+                            String newFileName = baseDirectory + textValue + "#" + fileNameSuffix;
+                            itemToRename.renameTo( new File( sd, newFileName ) );
+
+                            Toast toast = Toast.makeText( c, "renamed to " + newFileName, Toast.LENGTH_SHORT);
+                            toast.show();
+
+                            update();
+
+                        }
+                    });
+
+                    mode.finish();
+                    return true;
 
                 default:
                     return false;
@@ -89,8 +122,9 @@ public class FLAdapter extends RecyclerView.Adapter<FLViewHolder> {
         }
     };
 
-    public FLAdapter( String pBaseDirectory ){
+    public FLAdapter( String pBaseDirectory, Context context ){
         this.baseDirectory = pBaseDirectory;
+        this.c = context;
         updateFileList();
 
     }

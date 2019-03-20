@@ -33,6 +33,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.babanomania.pdfscanner.FLHandlers.DialogUtil;
+import com.babanomania.pdfscanner.FLHandlers.DialogUtilCallback;
 import com.babanomania.pdfscanner.FLHandlers.FLAdapter;
 import com.babanomania.pdfscanner.FLHandlers.FLViewHolder;
 import com.scanlibrary.ScanActivity;
@@ -62,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.rw);
         String baseDirectory =  getApplicationContext().getString(R.string.base_storage_path);
 
-        fileAdapter = new FLAdapter(baseDirectory);
+        fileAdapter = new FLAdapter(baseDirectory, this);
         recyclerView.setAdapter( fileAdapter );
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -95,52 +97,36 @@ public class MainActivity extends AppCompatActivity {
                 scanImgDirectory.mkdir();
             }
 
-            LayoutInflater layoutInflaterAndroid = LayoutInflater.from(c);
-            View mView = layoutInflaterAndroid.inflate(R.layout.file_input_dialog_box, null);
-            AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(c);
-            alertDialogBuilderUserInput.setView(mView);
+            DialogUtil.askUserFilaname( c, null, new DialogUtilCallback() {
 
-            final EditText fileNameText = mView.findViewById(R.id.userInputDialog);
-            alertDialogBuilderUserInput
-                    .setCancelable(false)
-                    .setPositiveButton("Save", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialogBox, int id) {
+                @Override
+                public void onSave(String textValue) {
 
-                            try {
+                    try {
 
-                                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy_hh-mm-ss");
-                                String timestamp = simpleDateFormat.format(new Date());
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy_hh-mm-ss");
+                        String timestamp = simpleDateFormat.format(new Date());
 
-                                String baseDirectory =  getApplicationContext().getString(R.string.base_storage_path);
-                                String filename = baseDirectory + fileNameText.getText().toString() + "#" + timestamp + ".png";
-                                File dest = new File(sd, filename);
+                        String baseDirectory =  getApplicationContext().getString(R.string.base_storage_path);
+                        String filename = baseDirectory + textValue + "#" + timestamp + ".png";
+                        File dest = new File(sd, filename);
 
-                                FileOutputStream out = new FileOutputStream(dest);
-                                bitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
-                                out.flush();
-                                out.close();
+                        FileOutputStream out = new FileOutputStream(dest);
+                        bitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
+                        out.flush();
+                        out.close();
 
-                                Toast toast = Toast.makeText(getApplicationContext(), "scanned image " + filename + " saved", Toast.LENGTH_SHORT);
-                                toast.show();
+                        Toast toast = Toast.makeText(getApplicationContext(), "scanned image " + filename + " saved", Toast.LENGTH_SHORT);
+                        toast.show();
 
-                                fileAdapter.update();
+                        fileAdapter.update();
 
-                            }catch(IOException ioe){
-                                ioe.printStackTrace();
-                            }
+                    }catch(IOException ioe){
+                        ioe.printStackTrace();
+                    }
 
-                        }
-                    })
-
-                    .setNegativeButton("Cancel",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialogBox, int id) {
-                                    dialogBox.cancel();
-                                }
-                            });
-
-            AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
-            alertDialogAndroid.show();
+                }
+            });
 
     }
 
