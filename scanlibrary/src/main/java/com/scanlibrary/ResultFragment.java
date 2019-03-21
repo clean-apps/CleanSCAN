@@ -8,13 +8,16 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -25,12 +28,14 @@ public class ResultFragment extends Fragment {
     private View view;
     private ImageView scannedImageView;
     private Button doneButton;
+    private Button addButton;
     private Bitmap original;
     private Button originalButton;
     private Button MagicColorButton;
     private Button grayModeButton;
     private Button bwButton;
     private Bitmap transformed;
+    private TextView pageNumber;
     private static ProgressDialogFragment progressDialogFragment;
 
     public ResultFragment() {
@@ -57,6 +62,20 @@ public class ResultFragment extends Fragment {
         setScannedImage(bitmap);
         doneButton = (Button) view.findViewById(R.id.doneButton);
         doneButton.setOnClickListener(new DoneButtonClickListener());
+        addButton = (Button) view.findViewById(R.id.addBtn);
+        addButton.setOnClickListener(new AddButtonClickListener());
+        pageNumber =  (TextView) view.findViewById(R.id.pageNumber);
+
+        final File sd = Environment.getExternalStorageDirectory();
+        final String stagingDirPath = view.getContext().getString( R.string.base_staging_path );
+        final File stagingDir = new File( sd, stagingDirPath );
+        if( stagingDir.listFiles() != null && stagingDir.listFiles().length > 0 ){
+            pageNumber.setText( String.valueOf( stagingDir.listFiles().length + 1) );
+
+        } else {
+            pageNumber.setText( "1" );
+        }
+
     }
 
     private Bitmap getBitmap() {
@@ -95,7 +114,43 @@ public class ResultFragment extends Fragment {
                         }
                         Uri uri = Utils.getUri(getActivity(), bitmap);
                         data.putExtra(ScanConstants.SCANNED_RESULT, uri);
+                        data.putExtra(ScanConstants.SCAN_MORE, false);
                         getActivity().setResult(Activity.RESULT_OK, data);
+                        original.recycle();
+                        System.gc();
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                dismissDialog();
+                                getActivity().finish();
+                            }
+                        });
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+    }
+
+    private class AddButtonClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            showProgressDialog(getResources().getString(R.string.loading));
+            AsyncTask.execute(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Intent data = new Intent();
+                        Bitmap bitmap = transformed;
+                        if (bitmap == null) {
+                            bitmap = original;
+                        }
+                        Uri uri = Utils.getUri(getActivity(), bitmap);
+                        data.putExtra(ScanConstants.SCANNED_RESULT, uri);
+                        data.putExtra(ScanConstants.SCAN_MORE, true);
+                        getActivity().setResult(Activity.RESULT_OK, data);
+
                         original.recycle();
                         System.gc();
                         getActivity().runOnUiThread(new Runnable() {

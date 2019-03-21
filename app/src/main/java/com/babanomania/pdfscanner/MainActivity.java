@@ -8,9 +8,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.pdf.PdfDocument;
 import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
 import android.os.Build;
@@ -37,19 +40,22 @@ import com.babanomania.pdfscanner.FLHandlers.DialogUtil;
 import com.babanomania.pdfscanner.FLHandlers.DialogUtilCallback;
 import com.babanomania.pdfscanner.FLHandlers.FLAdapter;
 import com.babanomania.pdfscanner.FLHandlers.FLViewHolder;
+import com.babanomania.pdfscanner.FLHandlers.PermissionUtil;
 import com.scanlibrary.ScanActivity;
 import com.scanlibrary.ScanConstants;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final int RUNTIME_PERMISSION_CODE = 7;
     private FLAdapter fileAdapter;
-    final Context c = this;
+    private final Context c = this;
+    private List<Uri> scannedBitmaps = new ArrayList<>();
 
     public MainActivity() {
     }
@@ -59,7 +65,22 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        AndroidRuntimePermission();
+        PermissionUtil.ask(this);
+
+        final File sd = Environment.getExternalStorageDirectory();
+
+        final String baseStorageDirectory =  getApplicationContext().getString( R.string.base_storage_path);
+        File scanStorageDirectory = new File(sd, baseStorageDirectory);
+        if (!scanStorageDirectory.exists()) {
+            scanStorageDirectory.mkdir();
+        }
+
+        final String baseStagingDirectory =  getApplicationContext().getString( R.string.base_staging_path);
+        File scanStagingDirectory = new File(sd, baseStagingDirectory);
+        if (!scanStagingDirectory.exists()) {
+            scanStagingDirectory.mkdir();
+        }
+
 
         RecyclerView recyclerView = findViewById(R.id.rw);
         String baseDirectory =  getApplicationContext().getString(R.string.base_storage_path);
@@ -77,194 +98,146 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void openCamera(View v){
+        scannedBitmaps.clear();
         Intent intent = new Intent(this, ScanActivity.class);
         intent.putExtra(ScanConstants.OPEN_INTENT_PREFERENCE, ScanConstants.OPEN_CAMERA);
         startActivityForResult(intent, ScanConstants.START_CAMERA_REQUEST_CODE);
     }
 
     public void openGallery(View v){
+        scannedBitmaps.clear();
         Intent intent = new Intent(this, ScanActivity.class);
         intent.putExtra(ScanConstants.OPEN_INTENT_PREFERENCE, ScanConstants.OPEN_MEDIA);
         startActivityForResult(intent, ScanConstants.PICKFILE_REQUEST_CODE);
     }
 
-    private void saveBitmap( final Bitmap bitmap ){
+    private void saveBitmap( final Bitmap bitmap, final boolean addMore ){
 
-            String baseDirectory =  getApplicationContext().getString(R.string.base_storage_path);
+            final String baseDirectory =  getApplicationContext().getString( addMore ? R.string.base_staging_path : R.string.base_storage_path);
             final File sd = Environment.getExternalStorageDirectory();
-            File scanImgDirectory = new File(sd, baseDirectory);
-            if (!scanImgDirectory.exists()) {
-                scanImgDirectory.mkdir();
-            }
 
-            DialogUtil.askUserFilaname( c, null, new DialogUtilCallback() {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy_hh-mm-ss");
+            final String timestamp = simpleDateFormat.format(new Date());
 
-                @Override
-                public void onSave(String textValue) {
+            if( addMore ){
 
-                    try {
+                try {
 
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy_hh-mm-ss");
-                        String timestamp = simpleDateFormat.format(new Date());
+                    String textValue = "SCANNED_STG_";
+                    String filename = baseDirectory + textValue + "#" + timestamp + ".png";
+                    File dest = new File(sd, filename);
 
-                        String baseDirectory =  getApplicationContext().getString(R.string.base_storage_path);
-                        String filename = baseDirectory + textValue + "#" + timestamp + ".png";
-                        File dest = new File(sd, filename);
+                    FileOutputStream out = new FileOutputStream(dest);
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
+                    out.flush();
+                    out.close();
 
-                        FileOutputStream out = new FileOutputStream(dest);
-                        bitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
-                        out.flush();
-                        out.close();
+                    fileAdapter.update();
 
-                        Toast toast = Toast.makeText(getApplicationContext(), "scanned image " + filename + " saved", Toast.LENGTH_SHORT);
-                        toast.show();
-
-                        fileAdapter.update();
-
-                    }catch(IOException ioe){
-                        ioe.printStackTrace();
-                    }
-
+                }catch(IOException ioe){
+                    ioe.printStackTrace();
                 }
-            });
 
+            } else {
+
+                DialogUtil.askUserFilaname( c, null, new DialogUtilCallback() {
+
+                    @Override
+                    public void onSave(String textValue) {
+
+                        try {
+
+                            PdfDocument document = new PdfDocument();
+
+                            String stagingDirPath = getApplicationContext().getString( R.string.base_staging_path );
+                            File stagingDir = new File( sd, stagingDirPath );
+                            if( stagingDir.listFiles() != null ){
+                                for( File stagedFile : stagingDir.listFiles() ){
+
+                                    BitmapFactory.Options options = new BitmapFactory.Options();
+                                    options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                                    Bitmap bitmapSt = BitmapFactory.decodeFile( stagedFile.getAbsolutePath(), options);
+
+                                    PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(bitmap.getWidth(), bitmap.getHeight(), 1).create();
+                                    PdfDocument.Page page = document.startPage(pageInfo);
+
+                                    Canvas canvas = page.getCanvas();
+                                    Paint paint = new Paint();
+                                    paint.setColor(Color.parseColor("#ffffff"));
+                                    canvas.drawPaint(paint);
+
+                                    canvas.drawBitmap(bitmapSt, 0, 0 , null);
+                                    document.finishPage(page);
+
+                                }
+                            }
+
+                            PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(bitmap.getWidth(), bitmap.getHeight(), 1).create();
+                            PdfDocument.Page page = document.startPage(pageInfo);
+
+                            Canvas canvas = page.getCanvas();
+                            Paint paint = new Paint();
+                            paint.setColor(Color.parseColor("#ffffff"));
+                            canvas.drawPaint(paint);
+
+                            canvas.drawBitmap(bitmap, 0, 0 , null);
+                            document.finishPage(page);
+
+                            String filename = baseDirectory + textValue + "#" + timestamp + ".pdf";
+                            File dest = new File(sd, filename);
+
+                            FileOutputStream out = new FileOutputStream(dest);
+                            document.writeTo(out);
+
+                            out.flush();
+                            out.close();
+
+                            document.close();
+
+                            fileAdapter.update();
+
+                            if( stagingDir.listFiles() != null ){
+                                for( File stagedFile : stagingDir.listFiles() ){
+                                    stagedFile.delete();
+                                }
+                            }
+
+                        }catch(IOException ioe){
+                            ioe.printStackTrace();
+
+                        }
+
+                    }
+                });
+
+            }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if ( ( requestCode == ScanConstants.PICKFILE_REQUEST_CODE || requestCode == ScanConstants.START_CAMERA_REQUEST_CODE )
-                        && resultCode == Activity.RESULT_OK) {
+        if ( ( requestCode == ScanConstants.PICKFILE_REQUEST_CODE || requestCode == ScanConstants.START_CAMERA_REQUEST_CODE ) &&
+                resultCode == Activity.RESULT_OK) {
 
-            Uri uri = data.getExtras().getParcelable(ScanConstants.SCANNED_RESULT);
+            Uri uri = data.getExtras().getParcelable( ScanConstants.SCANNED_RESULT );
+            boolean doScanMore = data.getExtras().getBoolean( ScanConstants.SCAN_MORE );
 
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-                saveBitmap( bitmap );
+                saveBitmap( bitmap, doScanMore );
+
+                if( doScanMore ){
+                    scannedBitmaps.add(uri);
+                    Intent intent = new Intent(this, ScanActivity.class);
+                    intent.putExtra(ScanConstants.OPEN_INTENT_PREFERENCE, ScanConstants.OPEN_CAMERA);
+                    startActivityForResult(intent, ScanConstants.START_CAMERA_REQUEST_CODE);
+                }
 
                 //getContentResolver().delete(uri, null, null);
-                //scannedImageView.setImageBitmap(bitmap);
 
             } catch (IOException e) {
                 e.printStackTrace();
-            }
-        }
-    }
-
-    public void AndroidRuntimePermission(){
-
-        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
-
-            if(checkSelfPermission(Manifest.permission.CAMERA)!= PackageManager.PERMISSION_GRANTED){
-
-                if(shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)){
-
-                    AlertDialog.Builder alert_builder = new AlertDialog.Builder(MainActivity.this);
-                    alert_builder.setMessage("Camera Permission is Required.");
-                    alert_builder.setTitle("Please Grant Permission.");
-                    alert_builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-
-                            ActivityCompat.requestPermissions(
-                                    MainActivity.this,
-                                    new String[]{Manifest.permission.CAMERA},
-                                    RUNTIME_PERMISSION_CODE
-
-                            );
-                        }
-                    });
-
-                    alert_builder.setNeutralButton("Cancel",null);
-
-                    AlertDialog dialog = alert_builder.create();
-
-                    dialog.show();
-
-                } else {
-
-                    ActivityCompat.requestPermissions(
-                            MainActivity.this,
-                            new String[]{Manifest.permission.CAMERA},
-                            RUNTIME_PERMISSION_CODE
-                    );
-                }
-
-            } else if(checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
-
-                if(shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE)){
-
-                    AlertDialog.Builder alert_builder = new AlertDialog.Builder(MainActivity.this);
-                    alert_builder.setMessage("External Storage Read Permission is Required.");
-                    alert_builder.setTitle("Please Grant Permission.");
-                    alert_builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-
-                            ActivityCompat.requestPermissions(
-                                    MainActivity.this,
-                                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                                    RUNTIME_PERMISSION_CODE
-
-                            );
-                        }
-                    });
-
-                    alert_builder.setNeutralButton("Cancel",null);
-
-                    AlertDialog dialog = alert_builder.create();
-
-                    dialog.show();
-
-                }
-                else {
-
-                    ActivityCompat.requestPermissions(
-                            MainActivity.this,
-                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                            RUNTIME_PERMISSION_CODE
-                    );
-                }
-
-            } else if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
-
-                if(shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)){
-
-                    AlertDialog.Builder alert_builder = new AlertDialog.Builder(MainActivity.this);
-                    alert_builder.setMessage("External Storage Write Permission is Required.");
-                    alert_builder.setTitle("Please Grant Permission.");
-                    alert_builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-
-                            ActivityCompat.requestPermissions(
-                                    MainActivity.this,
-                                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                                    RUNTIME_PERMISSION_CODE
-
-                            );
-                        }
-                    });
-
-                    alert_builder.setNeutralButton("Cancel",null);
-
-                    AlertDialog dialog = alert_builder.create();
-
-                    dialog.show();
-
-                } else {
-
-                    ActivityCompat.requestPermissions(
-                            MainActivity.this,
-                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                            RUNTIME_PERMISSION_CODE
-                    );
-                }
-
             }
         }
     }

@@ -53,7 +53,7 @@ public class FLViewHolder extends RecyclerView.ViewHolder {
         this.fl = fl;
         String label = fl.getName().split("#")[0];
         String timeLabel = fl.getName().split("#")[1]
-                                .replace( ".png", "" )
+                                .replace( ".pdf", "" )
                                 .replace( "_", " " );
 
         this.textViewLabel.setText( label );
@@ -86,7 +86,7 @@ public class FLViewHolder extends RecyclerView.ViewHolder {
                     Intent intent = new Intent(Intent.ACTION_VIEW);
                     intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     Uri sharedFileUri = FileProvider.getUriForFile(v.getContext(), "com.scanlibrary.provider", fl);
-                    intent.setDataAndType( sharedFileUri, "image/*");
+                    intent.setDataAndType( sharedFileUri, "application/pdf");
                     PackageManager pm = v.getContext().getPackageManager();
                     if (intent.resolveActivity(pm) != null) {
                         v.getContext().startActivity(intent);

@@ -17,4 +17,5 @@ public class ScanConstants {
     public final static String IMAGE_PATH = Environment.getExternalStorageDirectory().getPath() + "/PDF Scanner/tmp";
 
     public final static String SELECTED_BITMAP = "selectedBitmap";
+    public final static String SCAN_MORE = "scanMore";
 }
