@@ -41,6 +41,7 @@ import com.babanomania.pdfscanner.FLHandlers.DialogUtilCallback;
 import com.babanomania.pdfscanner.FLHandlers.FLAdapter;
 import com.babanomania.pdfscanner.FLHandlers.FLViewHolder;
 import com.babanomania.pdfscanner.FLHandlers.PermissionUtil;
+import com.babanomania.pdfscanner.FLHandlers.UIUtil;
 import com.scanlibrary.ScanActivity;
 import com.scanlibrary.ScanConstants;
 
@@ -65,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        RecyclerView recyclerView = findViewById(R.id.rw);
+        UIUtil.setLightNavigationBar( recyclerView, this );
         PermissionUtil.ask(this);
 
         final File sd = Environment.getExternalStorageDirectory();
@@ -82,9 +85,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        RecyclerView recyclerView = findViewById(R.id.rw);
         String baseDirectory =  getApplicationContext().getString(R.string.base_storage_path);
-
         fileAdapter = new FLAdapter(baseDirectory, this);
         recyclerView.setAdapter( fileAdapter );
 

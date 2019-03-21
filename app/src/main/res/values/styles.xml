@@ -9,9 +9,6 @@
         <item name="android:textColor">@color/textColor</item>
         <item name="actionModeBackground">@color/colorPrimaryDark</item>
         <item name="actionMenuTextColor">@android:color/white</item>
-        
-        <item name="android:navigationBarColor">@android:color/white</item>
-        <item name="android:windowLightNavigationBar">true</item>
     </style>
 
     <style name="AppThemeSplash" parent="Theme.AppCompat.DayNight.NoActionBar">

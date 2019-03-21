@@ -18,6 +18,7 @@ public class ScanActivity extends Activity implements IScanner, ComponentCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.scan_layout);
         init();
+        Utils.setLightNavigationBar( findViewById(android.R.id.content), this );
     }
 
     private void init() {
