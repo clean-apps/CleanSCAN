@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         RecyclerView recyclerView = findViewById(R.id.rw);
+
         UIUtil.setLightNavigationBar( recyclerView, this );
         PermissionUtil.ask(this);
 
@@ -129,7 +130,8 @@ public class MainActivity extends AppCompatActivity {
                     out.flush();
                     out.close();
 
-                    fileAdapter.notifyDataSetChanged();
+                    bitmap.recycle();
+                    System.gc();
 
                 }catch(IOException ioe){
                     ioe.printStackTrace();
@@ -209,6 +211,9 @@ public class MainActivity extends AppCompatActivity {
                             newDocument.setScanned( timestampView );
                             newDocument.setPageCount( document.getPages().size() );
                             viewModel.saveDocument(newDocument);
+
+                            bitmap.recycle();
+                            System.gc();
 
                         }catch(IOException ioe){
                             ioe.printStackTrace();

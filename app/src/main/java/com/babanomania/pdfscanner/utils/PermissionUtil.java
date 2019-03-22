@@ -16,9 +16,9 @@ public class PermissionUtil {
 
         if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ){
 
-            check_permission( activity, Manifest.permission.CAMERA, "Camera Permission is Required." );
-            check_permission( activity, Manifest.permission.READ_EXTERNAL_STORAGE, "External Storage Read Permission is Required." );
-            check_permission( activity, Manifest.permission.WRITE_EXTERNAL_STORAGE, "External Storage Write Permission is Required." );
+            check_permission( activity, Manifest.permission.CAMERA, "Camera Permission is required to capture documents" );
+            check_permission( activity, Manifest.permission.READ_EXTERNAL_STORAGE, "External Storage read permission is required to store documents" );
+            check_permission( activity, Manifest.permission.WRITE_EXTERNAL_STORAGE, "External Storage write permission is required to read scanned documents" );
 
         }
     }
