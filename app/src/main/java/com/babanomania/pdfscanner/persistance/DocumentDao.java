@@ -19,7 +19,7 @@ public interface DocumentDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void save(Document document);
 
-    @Query("SELECT * FROM Document")
+    @Query("SELECT * FROM Document ORDER BY documentId DESC")
     LiveData<List<Document>> findAll();
 
     @Query( "SELECT COUNT(*) FROM Document" )
