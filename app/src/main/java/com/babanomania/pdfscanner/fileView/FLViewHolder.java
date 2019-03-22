@@ -10,7 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.babanomania.pdfscanner.R;
@@ -22,7 +22,8 @@ public class FLViewHolder extends RecyclerView.ViewHolder {
 
     private TextView textViewLabel;
     private TextView textViewTime;
-    private RelativeLayout itemLayout;
+    private TextView textViewCategory;
+    private LinearLayout itemLayout;
     private ActionMode.Callback actionModeCallbacks;
     private FLAdapter adapter;
     private Document documnt;
@@ -32,6 +33,7 @@ public class FLViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
         this.textViewLabel = itemView.findViewById(R.id.fileName);
         this.textViewTime = itemView.findViewById(R.id.timeLabel);
+        this.textViewCategory = itemView.findViewById(R.id.categoryLabel);
         this.itemLayout = itemView.findViewById(R.id.relativeLayout);
         this.adapter = adapter;
         this.actionModeCallbacks  = actionModeCallbacks;
@@ -53,11 +55,10 @@ public class FLViewHolder extends RecyclerView.ViewHolder {
     public void setDocument( final Document document ){
 
         this.documnt = document;
-        String label = document.getName();
-        String timeLabel = document.getScanned();
 
-        this.textViewLabel.setText( label );
-        this.textViewTime.setText( timeLabel );
+        this.textViewLabel.setText( document.getName() );
+        this.textViewTime.setText( document.getScanned() );
+        this.textViewCategory.setText( document.getCategory() );
 
         if (adapter.selectedItems.contains(document)) {
             itemLayout.setBackgroundColor(Color.LTGRAY);
