@@ -1,47 +1,35 @@
 package com.babanomania.pdfscanner;
 
-import android.Manifest;
 import android.app.Activity;
-import android.app.AlertDialog;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.pdf.PdfDocument;
 import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
-import android.view.ActionMode;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.Toast;
 
-import com.babanomania.pdfscanner.FLHandlers.DialogUtil;
-import com.babanomania.pdfscanner.FLHandlers.DialogUtilCallback;
-import com.babanomania.pdfscanner.FLHandlers.FLAdapter;
-import com.babanomania.pdfscanner.FLHandlers.FLViewHolder;
-import com.babanomania.pdfscanner.FLHandlers.PermissionUtil;
-import com.babanomania.pdfscanner.FLHandlers.UIUtil;
+import com.babanomania.pdfscanner.persistance.DocumentViewModel;
+import com.babanomania.pdfscanner.persistance.Document;
+import com.babanomania.pdfscanner.utils.DialogUtil;
+import com.babanomania.pdfscanner.utils.DialogUtilCallback;
+import com.babanomania.pdfscanner.fileView.FLAdapter;
+import com.babanomania.pdfscanner.utils.PermissionUtil;
+import com.babanomania.pdfscanner.utils.UIUtil;
 import com.scanlibrary.ScanActivity;
 import com.scanlibrary.ScanConstants;
 
@@ -57,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
     private FLAdapter fileAdapter;
     private final Context c = this;
     private List<Uri> scannedBitmaps = new ArrayList<>();
+
+    private DocumentViewModel viewModel;
 
     public MainActivity() {
     }
@@ -84,10 +74,17 @@ public class MainActivity extends AppCompatActivity {
             scanStagingDirectory.mkdir();
         }
 
+        viewModel = ViewModelProviders.of(this).get(DocumentViewModel.class);
 
-        String baseDirectory =  getApplicationContext().getString(R.string.base_storage_path);
-        fileAdapter = new FLAdapter(baseDirectory, this);
+        fileAdapter = new FLAdapter( viewModel, this);
         recyclerView.setAdapter( fileAdapter );
+
+        viewModel.getAllDocuments().observe(this, new Observer<List<Document>>() {
+                    @Override
+                    public void onChanged(@Nullable List<Document> documents) {
+                        fileAdapter.setData(documents);
+                    }
+                });
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -124,8 +121,7 @@ public class MainActivity extends AppCompatActivity {
 
                 try {
 
-                    String textValue = "SCANNED_STG_";
-                    String filename = baseDirectory + textValue + "#" + timestamp + ".png";
+                    String filename = baseDirectory + "SCANNED_STG_" + timestamp + ".png";
                     File dest = new File(sd, filename);
 
                     FileOutputStream out = new FileOutputStream(dest);
@@ -133,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
                     out.flush();
                     out.close();
 
-                    fileAdapter.update();
+                    fileAdapter.notifyDataSetChanged();
 
                 }catch(IOException ioe){
                     ioe.printStackTrace();
@@ -184,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
                             canvas.drawBitmap(bitmap, 0, 0 , null);
                             document.finishPage(page);
 
-                            String filename = baseDirectory + textValue + "#" + timestamp + ".pdf";
+                            String filename = baseDirectory + "SCANNED_" + timestamp + ".pdf";
                             File dest = new File(sd, filename);
 
                             FileOutputStream out = new FileOutputStream(dest);
@@ -195,13 +191,23 @@ public class MainActivity extends AppCompatActivity {
 
                             document.close();
 
-                            fileAdapter.update();
+                            fileAdapter.notifyDataSetChanged();
 
                             if( stagingDir.listFiles() != null ){
                                 for( File stagedFile : stagingDir.listFiles() ){
                                     stagedFile.delete();
                                 }
                             }
+
+                            SimpleDateFormat simpleDateFormatView = new SimpleDateFormat("dd-MM-yyyy hh:mm");
+                            final String timestampView = simpleDateFormatView.format(new Date());
+
+                            Document newDocument = new Document();
+                            newDocument.setName( textValue );
+                            newDocument.setCategory( "Receipts" );
+                            newDocument.setPath( dest.getName() );
+                            newDocument.setScanned( timestampView );
+                            viewModel.saveDocument(newDocument);
 
                         }catch(IOException ioe){
                             ioe.printStackTrace();

@@ -1,9 +1,10 @@
-package com.babanomania.pdfscanner.FLHandlers;
+package com.babanomania.pdfscanner.fileView;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Environment;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
@@ -13,6 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.babanomania.pdfscanner.R;
+import com.babanomania.pdfscanner.persistance.Document;
 
 import java.io.File;
 
@@ -23,7 +25,7 @@ public class FLViewHolder extends RecyclerView.ViewHolder {
     private RelativeLayout itemLayout;
     private ActionMode.Callback actionModeCallbacks;
     private FLAdapter adapter;
-    private File fl;
+    private Document documnt;
 
 
     public FLViewHolder(View itemView, ActionMode.Callback actionModeCallbacks, FLAdapter adapter ) {
@@ -35,7 +37,7 @@ public class FLViewHolder extends RecyclerView.ViewHolder {
         this.actionModeCallbacks  = actionModeCallbacks;
     }
 
-    void selectItem(File item) {
+    void selectItem(Document item) {
         if (this.adapter.multiSelect) {
             if (this.adapter.selectedItems.contains(item)) {
                 this.adapter.selectedItems.remove(item);
@@ -48,18 +50,16 @@ public class FLViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    public void setFile( final File fl ){
+    public void setDocument( final Document document ){
 
-        this.fl = fl;
-        String label = fl.getName().split("#")[0];
-        String timeLabel = fl.getName().split("#")[1]
-                                .replace( ".pdf", "" )
-                                .replace( "_", " " );
+        this.documnt = document;
+        String label = document.getName();
+        String timeLabel = document.getScanned();
 
         this.textViewLabel.setText( label );
         this.textViewTime.setText( timeLabel );
 
-        if (adapter.selectedItems.contains(fl)) {
+        if (adapter.selectedItems.contains(document)) {
             itemLayout.setBackgroundColor(Color.LTGRAY);
 
         } else {
@@ -73,7 +73,7 @@ public class FLViewHolder extends RecyclerView.ViewHolder {
 
                 if( adapter.multiSelect ){
 
-                    selectItem(fl);
+                    selectItem(document);
 
                     if( adapter.selectedItems.size() == 0 ){
                         adapter.mActionMode.finish();
@@ -85,7 +85,13 @@ public class FLViewHolder extends RecyclerView.ViewHolder {
                 } else {
                     Intent intent = new Intent(Intent.ACTION_VIEW);
                     intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    Uri sharedFileUri = FileProvider.getUriForFile(v.getContext(), "com.scanlibrary.provider", fl);
+
+                    final File sd = Environment.getExternalStorageDirectory();
+                    String baseDirectory = v.getContext().getString(R.string.base_storage_path);
+                    String newFileName = baseDirectory + document.getPath();
+                    File toOpen = new File( sd, newFileName );
+
+                    Uri sharedFileUri = FileProvider.getUriForFile(v.getContext(), "com.scanlibrary.provider", toOpen);
                     intent.setDataAndType( sharedFileUri, "application/pdf");
                     PackageManager pm = v.getContext().getPackageManager();
                     if (intent.resolveActivity(pm) != null) {
@@ -100,7 +106,7 @@ public class FLViewHolder extends RecyclerView.ViewHolder {
             @Override
             public boolean onLongClick(View view) {
                 adapter.mActionMode = ((AppCompatActivity)view.getContext()).startSupportActionMode(actionModeCallbacks);
-                selectItem(fl);
+                selectItem(document);
                 return true;
             }
         });

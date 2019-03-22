@@ -1,10 +1,6 @@
-package com.babanomania.pdfscanner.FLHandlers;
+package com.babanomania.pdfscanner.fileView;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.graphics.Bitmap;
-import android.icu.text.SimpleDateFormat;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v7.view.ActionMode;
@@ -15,29 +11,28 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.babanomania.pdfscanner.R;
+import com.babanomania.pdfscanner.persistance.Document;
+import com.babanomania.pdfscanner.persistance.DocumentViewModel;
+import com.babanomania.pdfscanner.utils.DialogUtil;
+import com.babanomania.pdfscanner.utils.DialogUtilCallback;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
 public class FLAdapter extends RecyclerView.Adapter<FLViewHolder> {
 
-    private final String baseDirectory;
-    private File[] fileList;
+    final Context context;
+    protected ActionMode mActionMode;
 
     public boolean multiSelect = false;
-    public List<File> selectedItems = new ArrayList<>();
-    protected ActionMode mActionMode;
-    final Context c;
+    private List<Document> documentList = new ArrayList<>();
+    public List<Document> selectedItems = new ArrayList<>();
+
+    private DocumentViewModel viewModel;
 
     private ActionMode.Callback actionModeCallbacks = new ActionMode.Callback() {
 
@@ -73,8 +68,14 @@ public class FLAdapter extends RecyclerView.Adapter<FLViewHolder> {
             switch (item.getItemId()) {
                 case R.id.menu_delete:
 
-                    for (File fileItem  : selectedItems) {
-                        fileItem.delete();
+                    for (Document documentItem  : selectedItems) {
+
+                        final String baseDirectory =  context.getString(R.string.base_storage_path);
+                        final File sd = Environment.getExternalStorageDirectory();
+
+                        File toDelete = new File( sd, baseDirectory + documentItem.getPath() );
+                        toDelete.delete();
+                        viewModel.deleteDocument(documentItem);
                     }
 
                     mode.finish();
@@ -82,25 +83,19 @@ public class FLAdapter extends RecyclerView.Adapter<FLViewHolder> {
 
                 case R.id.menu_edit:
 
-                    final File itemToRename = selectedItems.get(0);
-                    String originalName = itemToRename.getName();
-                    final String fileNamePrefix = originalName.split("#")[0];
-                    final String fileNameSuffix = originalName.split("#")[1];
-
-                    DialogUtil.askUserFilaname( c, fileNamePrefix, new DialogUtilCallback() {
+                    final Document docToRename = selectedItems.get(0);
+                    DialogUtil.askUserFilaname(context, docToRename.getName(), new DialogUtilCallback() {
 
                         @Override
                         public void onSave(String textValue) {
 
-                            final File sd = Environment.getExternalStorageDirectory();
-                            String baseDirectory = c.getString(R.string.base_storage_path);
-                            String newFileName = baseDirectory + textValue + "#" + fileNameSuffix;
-                            itemToRename.renameTo( new File( sd, newFileName ) );
+                            docToRename.setName( textValue );
+                            viewModel.updateDocument(docToRename);
 
-                            Toast toast = Toast.makeText( c, "renamed to " + newFileName, Toast.LENGTH_SHORT);
+                            Toast toast = Toast.makeText(context, "Renamed to " + textValue, Toast.LENGTH_SHORT);
                             toast.show();
 
-                            update();
+                            notifyDataSetChanged();
 
                         }
                     });
@@ -118,41 +113,19 @@ public class FLAdapter extends RecyclerView.Adapter<FLViewHolder> {
         public void onDestroyActionMode(ActionMode mode) {
             multiSelect = false;
             selectedItems.clear();
-            update();
+            notifyDataSetChanged();
         }
     };
 
-    public FLAdapter( String pBaseDirectory, Context context ){
-        this.baseDirectory = pBaseDirectory;
-        this.c = context;
-        updateFileList();
-
+    public FLAdapter( DocumentViewModel viewModel, Context context ){
+        this.viewModel = viewModel;
+        this.context = context;
     }
 
-    public void update(){
-        updateFileList();
+    public void setData(List<Document> documents){
+        this.documentList.clear();
+        this.documentList.addAll( documents );
         notifyDataSetChanged();
-    }
-
-    private void updateFileList(){
-
-        File sd = Environment.getExternalStorageDirectory();
-        File dir = new File(sd, this.baseDirectory);
-
-        if( dir.listFiles() != null ) {
-            this.fileList = dir.listFiles();
-
-            Arrays.sort(    this.fileList,
-                            new Comparator<File>(){
-                                public int compare(File f1, File f2){
-                                    return Long.valueOf( f2.lastModified() ).compareTo( f1.lastModified() );
-                                }
-                            }
-                );
-
-        } else {
-            this.fileList = new File[0];
-        }
     }
 
     @NonNull
@@ -168,12 +141,12 @@ public class FLAdapter extends RecyclerView.Adapter<FLViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull FLViewHolder viewHolder, int i) {
-            viewHolder.setFile( this.fileList[i] );
+            viewHolder.setDocument( this.documentList.get(i) );
     }
 
     @Override
     public int getItemCount() {
-            return this.fileList.length;
+        return this.documentList.size();
     }
 
 }

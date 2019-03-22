@@ -1,4 +1,4 @@
-package com.babanomania.pdfscanner.FLHandlers;
+package com.babanomania.pdfscanner.utils;
 
 import android.app.Activity;
 import android.graphics.Color;
