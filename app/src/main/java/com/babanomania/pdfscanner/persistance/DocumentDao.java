@@ -22,9 +22,6 @@ public interface DocumentDao {
     @Query("SELECT * FROM Document ORDER BY documentId DESC")
     LiveData<List<Document>> findAll();
 
-    @Query( "SELECT COUNT(*) FROM Document" )
-    int count();
-
     @Update
     void update( Document document );
 
