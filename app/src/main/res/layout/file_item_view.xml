@@ -58,8 +58,20 @@
                 android:drawablePadding="-10dp"
                 android:drawableLeft="@drawable/ic_outline_calendar_today_24px"/>
 
+
+            <TextView
+                android:id="@+id/pageCount"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textSize="12sp"
+                android:paddingLeft="10dp"
+                android:text="2 Pages"
+                android:drawablePadding="-10dp"
+                android:drawableLeft="@drawable/ic_outline_filter_24px" />
+
         </LinearLayout>
 
     </LinearLayout>
+
 
 </LinearLayout>

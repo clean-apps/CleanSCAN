@@ -22,6 +22,8 @@ public class Document {
     @NonNull
     private String path;
 
+    private int pageCount;
+
     private String scanned;
 
     public int getDocumentId() {
@@ -57,6 +59,14 @@ public class Document {
 
     public void setPath(@NonNull String path) {
         this.path = path;
+    }
+
+    public int getPageCount() {
+        return pageCount;
+    }
+
+    public void setPageCount(int pageCount) {
+        this.pageCount = pageCount;
     }
 
     public String getScanned() {

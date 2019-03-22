@@ -207,6 +207,7 @@ public class MainActivity extends AppCompatActivity {
                             newDocument.setCategory( "Receipts" );
                             newDocument.setPath( dest.getName() );
                             newDocument.setScanned( timestampView );
+                            newDocument.setPageCount( document.getPages().size() );
                             viewModel.saveDocument(newDocument);
 
                         }catch(IOException ioe){

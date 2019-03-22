@@ -23,6 +23,7 @@ public class FLViewHolder extends RecyclerView.ViewHolder {
     private TextView textViewLabel;
     private TextView textViewTime;
     private TextView textViewCategory;
+    private TextView textPageCount;
     private LinearLayout itemLayout;
     private ActionMode.Callback actionModeCallbacks;
     private FLAdapter adapter;
@@ -34,6 +35,7 @@ public class FLViewHolder extends RecyclerView.ViewHolder {
         this.textViewLabel = itemView.findViewById(R.id.fileName);
         this.textViewTime = itemView.findViewById(R.id.timeLabel);
         this.textViewCategory = itemView.findViewById(R.id.categoryLabel);
+        this.textPageCount = itemView.findViewById(R.id.pageCount);
         this.itemLayout = itemView.findViewById(R.id.relativeLayout);
         this.adapter = adapter;
         this.actionModeCallbacks  = actionModeCallbacks;
@@ -59,6 +61,15 @@ public class FLViewHolder extends RecyclerView.ViewHolder {
         this.textViewLabel.setText( document.getName() );
         this.textViewTime.setText( document.getScanned() );
         this.textViewCategory.setText( document.getCategory() );
+
+        if( document.getPageCount() > 1 ) {
+            this.textPageCount.setVisibility( View.VISIBLE );
+            this.textPageCount.setText( String.valueOf(document.getPageCount()) + " Pages" );
+
+        } else {
+            this.textPageCount.setVisibility( View.GONE );
+
+        }
 
         if (adapter.selectedItems.contains(document)) {
             itemLayout.setBackgroundColor(Color.LTGRAY);
