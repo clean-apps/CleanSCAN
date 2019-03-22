@@ -10,4 +10,20 @@
     <string name="menu_delete">Delete</string>
     <string name="menu_rename">Rename</string>
 
+    <string-array name="category_array">
+        <item>Others</item>
+        <item>Shopping</item>
+        <item>Vehicle</item>
+        <item>Housing</item>
+        <item>Books</item>
+        <item>Food</item>
+        <item>Banking</item>
+        <item>Receipts</item>
+        <item>Manuals</item>
+        <item>Travel</item>
+        <item>Notes</item>
+        <item>ID</item>
+    </string-array>
+
+
 </resources>

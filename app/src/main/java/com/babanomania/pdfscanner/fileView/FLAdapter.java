@@ -21,7 +21,9 @@ import com.babanomania.pdfscanner.utils.DialogUtilCallback;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class FLAdapter extends RecyclerView.Adapter<FLViewHolder> {
 
@@ -84,12 +86,13 @@ public class FLAdapter extends RecyclerView.Adapter<FLViewHolder> {
                 case R.id.menu_edit:
 
                     final Document docToRename = selectedItems.get(0);
-                    DialogUtil.askUserFilaname(context, docToRename.getName(), new DialogUtilCallback() {
+                    DialogUtil.askUserFilaname(context, docToRename.getName(), docToRename.getCategory(), new DialogUtilCallback() {
 
                         @Override
-                        public void onSave(String textValue) {
+                        public void onSave(String textValue, String category) {
 
                             docToRename.setName( textValue );
+                            docToRename.setCategory( category );
                             viewModel.updateDocument(docToRename);
 
                             Toast toast = Toast.makeText(context, "Renamed to " + textValue, Toast.LENGTH_SHORT);

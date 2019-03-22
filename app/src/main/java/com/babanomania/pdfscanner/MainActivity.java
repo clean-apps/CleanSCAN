@@ -137,10 +137,10 @@ public class MainActivity extends AppCompatActivity {
 
             } else {
 
-                DialogUtil.askUserFilaname( c, null, new DialogUtilCallback() {
+                DialogUtil.askUserFilaname( c, null, null, new DialogUtilCallback() {
 
                     @Override
-                    public void onSave(String textValue) {
+                    public void onSave(String textValue, String category) {
 
                         try {
 
@@ -204,7 +204,7 @@ public class MainActivity extends AppCompatActivity {
 
                             Document newDocument = new Document();
                             newDocument.setName( textValue );
-                            newDocument.setCategory( "Receipts" );
+                            newDocument.setCategory( category );
                             newDocument.setPath( dest.getName() );
                             newDocument.setScanned( timestampView );
                             newDocument.setPageCount( document.getPages().size() );

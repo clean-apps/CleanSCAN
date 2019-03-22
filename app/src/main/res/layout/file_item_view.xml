@@ -46,7 +46,7 @@
                 android:textSize="12sp"
                 android:paddingRight="10dp"
                 android:drawablePadding="-10dp"
-                android:drawableLeft="@drawable/ic_outline_bookmark_border_24px"/>
+                android:drawableLeft="@drawable/ic_dot"/>
 
             <TextView
                 android:id="@+id/timeLabel"
@@ -56,7 +56,7 @@
                 android:textSize="12sp"
                 android:paddingLeft="10dp"
                 android:drawablePadding="-10dp"
-                android:drawableLeft="@drawable/ic_outline_calendar_today_24px"/>
+                android:drawableLeft="@drawable/ic_dot"/>
 
 
             <TextView
@@ -67,7 +67,7 @@
                 android:paddingLeft="10dp"
                 android:text="2 Pages"
                 android:drawablePadding="-10dp"
-                android:drawableLeft="@drawable/ic_outline_filter_24px" />
+                android:drawableLeft="@drawable/ic_dot" />
 
         </LinearLayout>
 

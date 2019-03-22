@@ -1,5 +1,6 @@
 package com.babanomania.pdfscanner.fileView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -10,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -17,9 +19,12 @@ import com.babanomania.pdfscanner.R;
 import com.babanomania.pdfscanner.persistance.Document;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 public class FLViewHolder extends RecyclerView.ViewHolder {
 
+    private ImageView categoryIcon;
     private TextView textViewLabel;
     private TextView textViewTime;
     private TextView textViewCategory;
@@ -29,9 +34,11 @@ public class FLViewHolder extends RecyclerView.ViewHolder {
     private FLAdapter adapter;
     private Document documnt;
 
+    private Map<String, Integer> categoryImageMap = new HashMap<>();
 
     public FLViewHolder(View itemView, ActionMode.Callback actionModeCallbacks, FLAdapter adapter ) {
         super(itemView);
+        this.categoryIcon =  itemView.findViewById(R.id.imageView);
         this.textViewLabel = itemView.findViewById(R.id.fileName);
         this.textViewTime = itemView.findViewById(R.id.timeLabel);
         this.textViewCategory = itemView.findViewById(R.id.categoryLabel);
@@ -39,6 +46,19 @@ public class FLViewHolder extends RecyclerView.ViewHolder {
         this.itemLayout = itemView.findViewById(R.id.relativeLayout);
         this.adapter = adapter;
         this.actionModeCallbacks  = actionModeCallbacks;
+
+        categoryImageMap.put( "Others", R.drawable.ic_category_others );
+        categoryImageMap.put( "Shopping", R.drawable.ic_category_shopping );
+        categoryImageMap.put( "Vehicle", R.drawable.ic_category_vehicle );
+        categoryImageMap.put( "Housing", R.drawable.ic_category_housing );
+        categoryImageMap.put( "Books", R.drawable.ic_category_books );
+        categoryImageMap.put( "Food", R.drawable.ic_category_food );
+        categoryImageMap.put( "Banking", R.drawable.ic_category_banking );
+        categoryImageMap.put( "Receipts", R.drawable.ic_category_receipt );
+        categoryImageMap.put( "Manuals", R.drawable.ic_category_manuals );
+        categoryImageMap.put( "Travel", R.drawable.ic_category_travel );
+        categoryImageMap.put( "Notes", R.drawable.ic_category_notes );
+        categoryImageMap.put( "ID", R.drawable.ic_category_id );
     }
 
     void selectItem(Document item) {
@@ -54,7 +74,7 @@ public class FLViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    public void setDocument( final Document document ){
+    public void setDocument(final Document document ){
 
         this.documnt = document;
 
@@ -77,6 +97,15 @@ public class FLViewHolder extends RecyclerView.ViewHolder {
         } else {
             itemLayout.setBackgroundColor(Color.WHITE);
 
+        }
+
+        Integer resourceId = categoryImageMap.get( document.getCategory() );
+        if( resourceId == null ){
+            this.categoryIcon.setImageResource(R.drawable.ic_category_others);
+
+        } else {
+
+            this.categoryIcon.setImageResource(resourceId);
         }
 
         this.itemLayout.setOnClickListener(new View.OnClickListener() {
