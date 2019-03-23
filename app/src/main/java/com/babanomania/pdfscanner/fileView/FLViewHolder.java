@@ -50,6 +50,8 @@ public class FLViewHolder extends RecyclerView.ViewHolder {
         categoryImageMap.put( "Others", R.drawable.ic_category_others );
         categoryImageMap.put( "Shopping", R.drawable.ic_category_shopping );
         categoryImageMap.put( "Vehicle", R.drawable.ic_category_vehicle );
+        categoryImageMap.put( "Medical", R.drawable.ic_category_medical );
+        categoryImageMap.put( "Legal", R.drawable.ic_category_legal );
         categoryImageMap.put( "Housing", R.drawable.ic_category_housing );
         categoryImageMap.put( "Books", R.drawable.ic_category_books );
         categoryImageMap.put( "Food", R.drawable.ic_category_food );
