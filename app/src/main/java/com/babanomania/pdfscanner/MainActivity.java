@@ -6,11 +6,6 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.pdf.PdfDocument;
 import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
 import android.os.Environment;
@@ -28,6 +23,9 @@ import com.babanomania.pdfscanner.persistance.Document;
 import com.babanomania.pdfscanner.utils.DialogUtil;
 import com.babanomania.pdfscanner.utils.DialogUtilCallback;
 import com.babanomania.pdfscanner.fileView.FLAdapter;
+import com.babanomania.pdfscanner.utils.FileIOUtils;
+import com.babanomania.pdfscanner.utils.FileWritingCallback;
+import com.babanomania.pdfscanner.utils.PDFWriterUtil;
 import com.babanomania.pdfscanner.utils.PermissionUtil;
 import com.babanomania.pdfscanner.utils.UIUtil;
 import com.scanlibrary.ScanActivity;
@@ -61,19 +59,11 @@ public class MainActivity extends AppCompatActivity {
         UIUtil.setLightNavigationBar( recyclerView, this );
         PermissionUtil.ask(this);
 
-        final File sd = Environment.getExternalStorageDirectory();
-
         final String baseStorageDirectory =  getApplicationContext().getString( R.string.base_storage_path);
-        File scanStorageDirectory = new File(sd, baseStorageDirectory);
-        if (!scanStorageDirectory.exists()) {
-            scanStorageDirectory.mkdir();
-        }
+        FileIOUtils.mkdir( baseStorageDirectory );
 
         final String baseStagingDirectory =  getApplicationContext().getString( R.string.base_staging_path);
-        File scanStagingDirectory = new File(sd, baseStagingDirectory);
-        if (!scanStagingDirectory.exists()) {
-            scanStagingDirectory.mkdir();
-        }
+        FileIOUtils.mkdir( baseStagingDirectory );
 
         viewModel = ViewModelProviders.of(this).get(DocumentViewModel.class);
 
@@ -116,19 +106,19 @@ public class MainActivity extends AppCompatActivity {
             final File sd = Environment.getExternalStorageDirectory();
 
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy_hh-mm-ss");
-            final String timestamp = simpleDateFormat.format(new Date());
+            final String timestamp = simpleDateFormat.format( new Date() );
 
             if( addMore ){
 
                 try {
 
-                    String filename = baseDirectory + "SCANNED_STG_" + timestamp + ".png";
-                    File dest = new File(sd, filename);
-
-                    FileOutputStream out = new FileOutputStream(dest);
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
-                    out.flush();
-                    out.close();
+                    String filename = "SCANNED_STG_" + timestamp + ".png";
+                    FileIOUtils.writeFile(baseDirectory, filename, new FileWritingCallback() {
+                        @Override
+                        public void write(FileOutputStream out) {
+                            bitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
+                        }
+                    });
 
                     bitmap.recycle();
                     System.gc();
@@ -146,60 +136,34 @@ public class MainActivity extends AppCompatActivity {
 
                         try {
 
-                            PdfDocument document = new PdfDocument();
+                            final PDFWriterUtil pdfWriter = new PDFWriterUtil();
 
                             String stagingDirPath = getApplicationContext().getString( R.string.base_staging_path );
-                            File stagingDir = new File( sd, stagingDirPath );
-                            if( stagingDir.listFiles() != null ){
-                                for( File stagedFile : stagingDir.listFiles() ){
 
-                                    BitmapFactory.Options options = new BitmapFactory.Options();
-                                    options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-                                    Bitmap bitmapSt = BitmapFactory.decodeFile( stagedFile.getAbsolutePath(), options);
-
-                                    PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(bitmap.getWidth(), bitmap.getHeight(), 1).create();
-                                    PdfDocument.Page page = document.startPage(pageInfo);
-
-                                    Canvas canvas = page.getCanvas();
-                                    Paint paint = new Paint();
-                                    paint.setColor(Color.parseColor("#ffffff"));
-                                    canvas.drawPaint(paint);
-
-                                    canvas.drawBitmap(bitmapSt, 0, 0 , null);
-                                    document.finishPage(page);
-
-                                }
+                            List<File> stagingFiles = FileIOUtils.getAllFiles( stagingDirPath );
+                            for ( File stagedFile : stagingFiles ) {
+                                pdfWriter.addFile( stagedFile );
                             }
 
-                            PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(bitmap.getWidth(), bitmap.getHeight(), 1).create();
-                            PdfDocument.Page page = document.startPage(pageInfo);
+                            pdfWriter.addBitmap(bitmap);
 
-                            Canvas canvas = page.getCanvas();
-                            Paint paint = new Paint();
-                            paint.setColor(Color.parseColor("#ffffff"));
-                            canvas.drawPaint(paint);
+                            String filename = "SCANNED_" + timestamp + ".pdf";
+                            FileIOUtils.writeFile( baseDirectory, filename, new FileWritingCallback() {
+                                @Override
+                                public void write(FileOutputStream out) {
+                                    try {
+                                        pdfWriter.write(out);
 
-                            canvas.drawBitmap(bitmap, 0, 0 , null);
-                            document.finishPage(page);
+                                    }catch (IOException e){
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
 
-                            String filename = baseDirectory + "SCANNED_" + timestamp + ".pdf";
-                            File dest = new File(sd, filename);
-
-                            FileOutputStream out = new FileOutputStream(dest);
-                            document.writeTo(out);
-
-                            out.flush();
-                            out.close();
-
-                            document.close();
 
                             fileAdapter.notifyDataSetChanged();
 
-                            if( stagingDir.listFiles() != null ){
-                                for( File stagedFile : stagingDir.listFiles() ){
-                                    stagedFile.delete();
-                                }
-                            }
+                            FileIOUtils.clearDirectory( stagingDirPath );
 
                             SimpleDateFormat simpleDateFormatView = new SimpleDateFormat("dd-MM-yyyy hh:mm");
                             final String timestampView = simpleDateFormatView.format(new Date());
@@ -207,10 +171,12 @@ public class MainActivity extends AppCompatActivity {
                             Document newDocument = new Document();
                             newDocument.setName( textValue );
                             newDocument.setCategory( category );
-                            newDocument.setPath( dest.getName() );
+                            newDocument.setPath( filename );
                             newDocument.setScanned( timestampView );
-                            newDocument.setPageCount( document.getPages().size() );
+                            newDocument.setPageCount( pdfWriter.getPageCount() );
                             viewModel.saveDocument(newDocument);
+
+                            pdfWriter.close();
 
                             bitmap.recycle();
                             System.gc();
