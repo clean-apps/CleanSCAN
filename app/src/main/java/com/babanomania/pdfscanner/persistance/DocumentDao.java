@@ -22,6 +22,9 @@ public interface DocumentDao {
     @Query("SELECT * FROM Document ORDER BY documentId DESC")
     LiveData<List<Document>> findAll();
 
+    @Query("SELECT * FROM Document WHERE name like :text ORDER BY documentId DESC")
+    LiveData<List<Document>> search( String text );
+
     @Update
     void update( Document document );
 

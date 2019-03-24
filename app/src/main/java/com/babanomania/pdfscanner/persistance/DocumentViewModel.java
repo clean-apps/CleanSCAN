@@ -24,6 +24,10 @@ public class DocumentViewModel extends AndroidViewModel {
         return dao.findAll();
     }
 
+    public LiveData<List<Document>> search( String text ) {
+        return dao.search(text);
+    }
+
     public void saveDocument(final Document document) {
         executorService.execute(new Runnable() {
             @Override

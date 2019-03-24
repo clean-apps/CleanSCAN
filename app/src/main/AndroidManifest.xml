@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.babanomania.pdfscanner">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.babanomania.pdfscanner">
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -7,33 +8,54 @@
 
     <application
         android:allowBackup="true"
-        android:label="@string/app_name"
         android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".SplashScreen" android:theme="@style/AppThemeSplash">
+        <activity android:name=".SearchableActivity"
+                  android:theme="@style/AppThemeSearch"
+                  android:parentActivityName=".MainActivity"
+                  android:launchMode="singleTop" >
 
             <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+            <meta-data android:name="android.app.searchable" android:resource="@xml/searchable"/>
+
+        </activity>
+
+        <activity
+            android:name=".SplashScreen"
+            android:theme="@style/AppThemeSplash">
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-            <meta-data android:name="android.app.shortcuts" android:resource="@xml/shortcuts" />
-            <meta-data android:name="com.google.firebase.ml.vision.DEPENDENCIES" android:value="ocr" />
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
+
+            <meta-data
+                android:name="com.google.firebase.ml.vision.DEPENDENCIES"
+                android:value="ocr" />
 
         </activity>
 
         <activity android:name=".MainActivity">
-
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value=".SearchableActivity" />
         </activity>
 
-        <provider android:name="android.support.v4.content.FileProvider"
-                  android:authorities="com.scanlibrary.provider"
-                  android:exported="false"
-                  android:grantUriPermissions="true"></provider>
-
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.scanlibrary.provider"
+            android:exported="false"
+            android:grantUriPermissions="true" />
     </application>
 
 </manifest>

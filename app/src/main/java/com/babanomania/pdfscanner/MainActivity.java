@@ -1,6 +1,8 @@
 package com.babanomania.pdfscanner;
 
 import android.app.Activity;
+import android.app.SearchManager;
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
@@ -16,6 +18,9 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.SearchView;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.babanomania.pdfscanner.persistance.DocumentViewModel;
@@ -46,6 +51,9 @@ public class MainActivity extends AppCompatActivity {
 
     private DocumentViewModel viewModel;
 
+    private String searchText = "";
+    LiveData<List<Document>> liveData;
+
     public MainActivity() {
     }
 
@@ -70,7 +78,8 @@ public class MainActivity extends AppCompatActivity {
         fileAdapter = new FLAdapter( viewModel, this);
         recyclerView.setAdapter( fileAdapter );
 
-        viewModel.getAllDocuments().observe(this, new Observer<List<Document>>() {
+        liveData = viewModel.getAllDocuments();
+        liveData.observe(this, new Observer<List<Document>>() {
                     @Override
                     public void onChanged(@Nullable List<Document> documents) {
                         fileAdapter.setData(documents);
@@ -83,7 +92,17 @@ public class MainActivity extends AppCompatActivity {
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), linearLayoutManager.getOrientation());
         recyclerView.addItemDecoration(dividerItemDecoration);
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.default_menu, menu);
+        return true;
+    }
+
+    public void goToSearch(MenuItem mi){
+        Intent intent = new Intent(this, SearchableActivity.class);
+        startActivityForResult(intent, 0);
     }
 
     public void openCamera(View v){
