@@ -19,6 +19,7 @@ public class PermissionUtil {
             check_permission( activity, Manifest.permission.CAMERA, "Camera Permission is required to capture documents" );
             check_permission( activity, Manifest.permission.READ_EXTERNAL_STORAGE, "External Storage read permission is required to store documents" );
             check_permission( activity, Manifest.permission.WRITE_EXTERNAL_STORAGE, "External Storage write permission is required to read scanned documents" );
+            check_permission( activity, Manifest.permission.INTERNET, "Internet permission is required to read text from documents" );
 
         }
     }
