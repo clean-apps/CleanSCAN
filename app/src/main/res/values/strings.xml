@@ -11,6 +11,8 @@
     <string name="menu_delete">Delete</string>
     <string name="menu_rename">Rename</string>
     <string name="menu_search">Search</string>
+    <string name="menu_ocr">Extract Text</string>
+
 
     <string-array name="category_array">
         <item>Others</item>

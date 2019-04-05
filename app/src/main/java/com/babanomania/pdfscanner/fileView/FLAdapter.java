@@ -1,6 +1,8 @@
 package com.babanomania.pdfscanner.fileView;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v7.view.ActionMode;
@@ -13,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.babanomania.pdfscanner.OCRActivity;
 import com.babanomania.pdfscanner.R;
 import com.babanomania.pdfscanner.persistance.Document;
 import com.babanomania.pdfscanner.persistance.DocumentViewModel;
@@ -105,6 +108,25 @@ public class FLAdapter extends RecyclerView.Adapter<FLViewHolder> {
 
                     mode.finish();
                     return true;
+
+                case R.id.menu_ocr:
+
+                    final Document docToOcr = selectedItems.get(0);
+
+                    final String baseDirectory =  context.getString(R.string.base_storage_path);
+                    final File sd = Environment.getExternalStorageDirectory();
+
+                    File toOcr = new File( sd, baseDirectory + docToOcr.getPath() );
+
+                    Intent intent = new Intent( context, OCRActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("file_path", docToOcr.getPath()); //Your id
+                    intent.putExtras(bundle); //Put your id to your next Intent
+                    context.startActivity(intent);
+
+                    mode.finish();
+                    return true;
+
 
                 default:
                     return false;
