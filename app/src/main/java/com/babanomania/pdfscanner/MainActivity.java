@@ -20,6 +20,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.SparseArray;
+import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -57,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
     private List<Uri> scannedBitmaps = new ArrayList<>();
 
     private DocumentViewModel viewModel;
+    private LinearLayout emptyLayout;
 
     private String searchText = "";
     LiveData<List<Document>> liveData;
@@ -80,6 +82,8 @@ public class MainActivity extends AppCompatActivity {
         final String baseStagingDirectory =  getApplicationContext().getString( R.string.base_staging_path);
         FileIOUtils.mkdir( baseStagingDirectory );
 
+        this.emptyLayout = findViewById(R.id.empty_list);
+
         viewModel = ViewModelProviders.of(this).get(DocumentViewModel.class);
 
         fileAdapter = new FLAdapter( viewModel, this);
@@ -89,6 +93,14 @@ public class MainActivity extends AppCompatActivity {
         liveData.observe(this, new Observer<List<Document>>() {
                     @Override
                     public void onChanged(@Nullable List<Document> documents) {
+
+                        if( documents.size() > 0 ){
+                            emptyLayout.setVisibility(View.GONE);
+
+                        } else {
+                            emptyLayout.setVisibility(View.VISIBLE);
+                        }
+
                         fileAdapter.setData(documents);
                     }
                 });
