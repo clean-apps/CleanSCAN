@@ -128,11 +128,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void saveBitmap( final Bitmap bitmap, final boolean addMore ){
 
-
-        String delectedText = OCRUtils.getTextFromBitmap( getApplicationContext(), bitmap);
-        Toast.makeText( getApplicationContext(), delectedText, Toast.LENGTH_LONG).show();
-        Log.d(  "Clean Scan", "delected text : " + delectedText );
-
         final String baseDirectory =  getApplicationContext().getString( addMore ? R.string.base_staging_path : R.string.base_storage_path);
             final File sd = Environment.getExternalStorageDirectory();
 
