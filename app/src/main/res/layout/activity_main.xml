@@ -55,7 +55,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
-                android:text="No Documents Found"
+                android:text="Your List Is Empty"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
                 android:textSize="24dp"
@@ -65,7 +65,7 @@
                 android:id="@+id/empty_list_message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Scan a document to and start creating your list"
+                android:text="Scan a document and start creating a list"
                 android:paddingLeft="40dp"
                 android:paddingRight="40dp"
                 android:gravity="center_horizontal" />

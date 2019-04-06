@@ -8,11 +8,23 @@
     <string name="scan_shortcut_long_label">Scan A New Document</string>
     <string name="scan_disabled_message">Scanning Disabled</string>
 
+    <string name="ocr_waiting_text">Extracting Text, Please Wait ...</string>
+    <string name="ocr_failed_text">Unable to Extract Any Text.</string>
+    <string name="ocr_title">Automatic Text Extraction</string>
+
     <string name="menu_delete">Delete</string>
     <string name="menu_rename">Rename</string>
     <string name="menu_search">Search</string>
     <string name="menu_ocr">Extract Text</string>
 
+    <string name="intro_title1">Scan Documents</string>
+    <string name="intro_desc1">Easily digitize all your physical documents by converting them to PDFs</string>
+
+    <string name="intro_title2">Extract Texts</string>
+    <string name="intro_desc2">Share usable texts from documents, so that you don\'t have to type it ever again</string>
+
+    <string name="intro_title3">Organize Better</string>
+    <string name="intro_desc3">Categorize easily, and manage your document clutter much better</string>
 
     <string-array name="category_array">
         <item>Others</item>
@@ -30,6 +42,5 @@
         <item>Notes</item>
         <item>ID</item>
     </string-array>
-
 
 </resources>

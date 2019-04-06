@@ -14,6 +14,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v7.widget.SearchView;
+import android.view.View;
+import android.widget.LinearLayout;
 
 import com.babanomania.pdfscanner.fileView.FLAdapter;
 import com.babanomania.pdfscanner.persistance.Document;
@@ -24,6 +26,10 @@ import java.util.List;
 
 public class SearchableActivity extends AppCompatActivity {
 
+
+    private LinearLayout emptyLayout;
+    private  RecyclerView recyclerView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +37,7 @@ public class SearchableActivity extends AppCompatActivity {
 
         getSupportActionBar().setTitle(null);
 
-        RecyclerView recyclerView = findViewById(R.id.rwSearch);
+        this.recyclerView = findViewById(R.id.rwSearch);
 
         UIUtil.setLightNavigationBar( recyclerView, this );
 
@@ -40,9 +46,20 @@ public class SearchableActivity extends AppCompatActivity {
         final FLAdapter fileAdapter = new FLAdapter( viewModel, this);
         recyclerView.setAdapter( fileAdapter );
 
+        this.emptyLayout = findViewById(R.id.empty_search_list);
         viewModel.getAllDocuments().observe(this, new Observer<List<Document>>() {
             @Override
             public void onChanged(@Nullable List<Document> documents) {
+
+                if( documents.size() > 0 ){
+                    emptyLayout.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
+
+                } else {
+                    emptyLayout.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.GONE);
+                }
+
                 fileAdapter.setData(documents);
             }
         });
@@ -92,7 +109,7 @@ public class SearchableActivity extends AppCompatActivity {
 
     public void doMySearch( String query ){
 
-        RecyclerView recyclerView = findViewById(R.id.rwSearch);
+        this.recyclerView = findViewById(R.id.rwSearch);
 
         UIUtil.setLightNavigationBar( recyclerView, this );
 
@@ -104,6 +121,17 @@ public class SearchableActivity extends AppCompatActivity {
         viewModel.search( '%' + query + '%').observe(this, new Observer<List<Document>>() {
             @Override
             public void onChanged(@Nullable List<Document> documents) {
+
+
+                if( documents.size() > 0 ){
+                    emptyLayout.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
+
+                } else {
+                    emptyLayout.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.GONE);
+                }
+
                 fileAdapter.setData(documents);
             }
         });

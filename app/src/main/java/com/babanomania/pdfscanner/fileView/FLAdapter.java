@@ -120,13 +120,12 @@ public class FLAdapter extends RecyclerView.Adapter<FLViewHolder> {
 
                     Intent intent = new Intent( context, OCRActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putString("file_path", docToOcr.getPath()); //Your id
+                    bundle.putString( OCRActivity.FILE_PATH, docToOcr.getPath()); //Your id
                     intent.putExtras(bundle); //Put your id to your next Intent
                     context.startActivity(intent);
 
                     mode.finish();
                     return true;
-
 
                 default:
                     return false;
