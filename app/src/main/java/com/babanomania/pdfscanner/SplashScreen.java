@@ -26,12 +26,13 @@ public class SplashScreen extends AppCompatActivity {
 
                 @Override
                 public void run() {
-                    Intent i = new Intent(SplashScreen.this, IntroActivity.class);
+                    Intent i = new Intent(SplashScreen.this, MainActivity.class);
                     startActivity(i);
                     finish();
 
                 }
             }, SPLASH_TIME_OUT);
+
 
         } else {
 
@@ -40,7 +41,7 @@ public class SplashScreen extends AppCompatActivity {
 
                 @Override
                 public void run() {
-                    Intent i = new Intent(SplashScreen.this, MainActivity.class);
+                    Intent i = new Intent(SplashScreen.this, IntroActivity.class);
                     startActivity(i);
                     finish();
 
