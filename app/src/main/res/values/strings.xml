@@ -8,6 +8,10 @@
     <string name="scan_shortcut_long_label">Scan A New Document</string>
     <string name="scan_disabled_message">Scanning Disabled</string>
 
+    <string name="ocr_waiting_text">Extracting Text, Please Wait ...</string>
+    <string name="ocr_failed_text">Unable to Extract Any Text.</string>
+    <string name="ocr_title">Automatic Text Extraction</string>
+
     <string name="menu_delete">Delete</string>
     <string name="menu_rename">Rename</string>
     <string name="menu_search">Search</string>

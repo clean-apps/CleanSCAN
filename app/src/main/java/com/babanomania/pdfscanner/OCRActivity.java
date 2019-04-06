@@ -10,10 +10,13 @@ import android.os.ParcelFileDescriptor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.babanomania.pdfscanner.utils.OCRUtils;
@@ -26,6 +29,8 @@ public class OCRActivity extends AppCompatActivity {
 
     public EditText ocrText;
     public Button shareButton;
+    private ProgressBar progressBar;
+    public static String FILE_PATH = "file_path";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,15 +42,13 @@ public class OCRActivity extends AppCompatActivity {
 
         this.ocrText = findViewById(R.id.ocrText);
         this.shareButton = findViewById(R.id.shareBtn);
+        this.progressBar = findViewById(R.id.extractingProgress);
 
-        this.ocrText.setText( "Extracting Text, Please Wait ..." );
-        setTitle("Automatic Text Extraction");
+        this.ocrText.setText( getResources().getString(R.string.ocr_waiting_text) );
+        setTitle( getResources().getString(R.string.ocr_title) );
 
-        Bundle bundle = getIntent().getExtras();
-        final String filePath = bundle.getString("file_path");
-        new OCRExtractTask( this, getApplicationContext(), filePath )
-                .execute();
-
+        this.progressBar.setVisibility(View.VISIBLE);
+        this.shareButton.setVisibility(View.GONE);
         this.shareButton.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -61,12 +64,15 @@ public class OCRActivity extends AppCompatActivity {
                 }
         );
 
+        Bundle bundle = getIntent().getExtras();
+        final String filePath = bundle.getString(FILE_PATH);
+        new OCRExtractTask( this, getApplicationContext(), filePath )
+                .execute();
     }
 
     public void setText( String content ){
         this.ocrText.setText( content );
     }
-
 
     private class OCRExtractTask extends AsyncTask<String, Void, String> {
 
@@ -123,10 +129,24 @@ public class OCRActivity extends AppCompatActivity {
 
                 Log.d(  "Clean Scan", "detected text : " + extractedText );
                 this.ocrActivity.setText(extractedText.toString() );
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        shareButton.setVisibility(View.VISIBLE);
+                        progressBar.setVisibility(View.GONE);
+                    }
+                });
 
             }catch (Exception e){
-                e.printStackTrace();
-                this.ocrActivity.setText( "Unable to Extract Any Text." );
+                Log.e( "Clean Scan", "Unable to extract text", e );
+                this.ocrActivity.setText( getResources().getString(R.string.ocr_failed_text) );
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        shareButton.setVisibility(View.GONE);
+                        progressBar.setVisibility(View.GONE);
+                    }
+                });
 
             } finally {
                 return  null;
