@@ -53,7 +53,7 @@
 
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.scanlibrary.provider"
+            android:authorities="com.babanomania.pdfscanner.provider"
             android:exported="false"
             android:grantUriPermissions="true" />
     </application>

@@ -134,7 +134,7 @@ public class FLViewHolder extends RecyclerView.ViewHolder {
                     String newFileName = baseDirectory + document.getPath();
                     File toOpen = new File( sd, newFileName );
 
-                    Uri sharedFileUri = FileProvider.getUriForFile(v.getContext(), "com.scanlibrary.provider", toOpen);
+                    Uri sharedFileUri = FileProvider.getUriForFile(v.getContext(), "com.babanomania.pdfscanner.provider", toOpen);
                     intent.setDataAndType( sharedFileUri, "application/pdf");
                     PackageManager pm = v.getContext().getPackageManager();
                     if (intent.resolveActivity(pm) != null) {
