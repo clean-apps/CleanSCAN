@@ -18,10 +18,14 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.util.SparseArray;
+import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.babanomania.pdfscanner.persistance.DocumentViewModel;
 import com.babanomania.pdfscanner.persistance.Document;
@@ -30,9 +34,13 @@ import com.babanomania.pdfscanner.utils.DialogUtilCallback;
 import com.babanomania.pdfscanner.fileView.FLAdapter;
 import com.babanomania.pdfscanner.utils.FileIOUtils;
 import com.babanomania.pdfscanner.utils.FileWritingCallback;
+import com.babanomania.pdfscanner.utils.OCRUtils;
 import com.babanomania.pdfscanner.utils.PDFWriterUtil;
 import com.babanomania.pdfscanner.utils.PermissionUtil;
 import com.babanomania.pdfscanner.utils.UIUtil;
+import com.google.android.gms.vision.Frame;
+import com.google.android.gms.vision.text.TextBlock;
+import com.google.android.gms.vision.text.TextRecognizer;
 import com.scanlibrary.ScanActivity;
 import com.scanlibrary.ScanConstants;
 
@@ -50,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
     private List<Uri> scannedBitmaps = new ArrayList<>();
 
     private DocumentViewModel viewModel;
+    private LinearLayout emptyLayout;
 
     private String searchText = "";
     LiveData<List<Document>> liveData;
@@ -73,6 +82,8 @@ public class MainActivity extends AppCompatActivity {
         final String baseStagingDirectory =  getApplicationContext().getString( R.string.base_staging_path);
         FileIOUtils.mkdir( baseStagingDirectory );
 
+        this.emptyLayout = findViewById(R.id.empty_list);
+
         viewModel = ViewModelProviders.of(this).get(DocumentViewModel.class);
 
         fileAdapter = new FLAdapter( viewModel, this);
@@ -82,6 +93,14 @@ public class MainActivity extends AppCompatActivity {
         liveData.observe(this, new Observer<List<Document>>() {
                     @Override
                     public void onChanged(@Nullable List<Document> documents) {
+
+                        if( documents.size() > 0 ){
+                            emptyLayout.setVisibility(View.GONE);
+
+                        } else {
+                            emptyLayout.setVisibility(View.VISIBLE);
+                        }
+
                         fileAdapter.setData(documents);
                     }
                 });
@@ -121,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void saveBitmap( final Bitmap bitmap, final boolean addMore ){
 
-            final String baseDirectory =  getApplicationContext().getString( addMore ? R.string.base_staging_path : R.string.base_storage_path);
+        final String baseDirectory =  getApplicationContext().getString( addMore ? R.string.base_staging_path : R.string.base_storage_path);
             final File sd = Environment.getExternalStorageDirectory();
 
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy_hh-mm-ss");

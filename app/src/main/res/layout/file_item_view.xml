@@ -42,32 +42,32 @@
                 android:id="@+id/categoryLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="category label"
-                android:textSize="12sp"
+                android:drawableLeft="@drawable/ic_dot"
+                android:drawablePadding="2dp"
                 android:paddingRight="10dp"
-                android:drawablePadding="-10dp"
-                android:drawableLeft="@drawable/ic_dot"/>
+                android:text="category"
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/timeLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="time label"
-                android:textSize="12sp"
+                android:drawableLeft="@drawable/ic_dot"
+                android:drawablePadding="2dp"
                 android:paddingLeft="10dp"
-                android:drawablePadding="-10dp"
-                android:drawableLeft="@drawable/ic_dot"/>
+                android:text="01-04-2019 22:10"
+                android:textSize="12sp" />
 
 
             <TextView
                 android:id="@+id/pageCount"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:textSize="12sp"
+                android:drawableLeft="@drawable/ic_dot"
+                android:drawablePadding="2dp"
                 android:paddingLeft="10dp"
                 android:text="2 Pages"
-                android:drawablePadding="-10dp"
-                android:drawableLeft="@drawable/ic_dot" />
+                android:textSize="12sp" />
 
         </LinearLayout>
 

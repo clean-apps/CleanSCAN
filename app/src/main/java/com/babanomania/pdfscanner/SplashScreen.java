@@ -1,6 +1,7 @@
 package com.babanomania.pdfscanner;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,17 +19,40 @@ public class SplashScreen extends AppCompatActivity {
 
         DocumentDatabase.getInstance( getApplicationContext() );
 
-        new Handler().postDelayed(new Runnable() {
+        if (restorePrefData()) {
+
+            new Handler().postDelayed(new Runnable() {
 
 
-            @Override
-            public void run() {
-                Intent i = new Intent(SplashScreen.this, MainActivity.class);
-                startActivity(i);
-                finish();
+                @Override
+                public void run() {
+                    Intent i = new Intent(SplashScreen.this, MainActivity.class);
+                    startActivity(i);
+                    finish();
 
-            }
-        }, SPLASH_TIME_OUT);
+                }
+            }, SPLASH_TIME_OUT);
 
+
+        } else {
+
+            new Handler().postDelayed(new Runnable() {
+
+
+                @Override
+                public void run() {
+                    Intent i = new Intent(SplashScreen.this, IntroActivity.class);
+                    startActivity(i);
+                    finish();
+
+                }
+            }, SPLASH_TIME_OUT);
+        }
+    }
+
+    private boolean restorePrefData() {
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("myPrefs",MODE_PRIVATE);
+        Boolean isIntroActivityOpnendBefore = pref.getBoolean("isIntroOpnend",false);
+        return  isIntroActivityOpnendBefore;
     }
 }
