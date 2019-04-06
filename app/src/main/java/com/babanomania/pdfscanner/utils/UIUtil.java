@@ -18,4 +18,16 @@ public class UIUtil {
             activity.getWindow().setNavigationBarColor(Color.parseColor("#FAFAFA"));
         }
     }
+
+    public static void setWhiteNavigationBar(View view, Activity activity){
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+            int flags = view.getSystemUiVisibility();
+            flags |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+            view.setSystemUiVisibility(flags);
+            activity.getWindow().setNavigationBarColor(Color.parseColor("#FFFFFF"));
+        }
+    }
 }
