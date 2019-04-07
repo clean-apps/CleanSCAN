@@ -27,6 +27,9 @@ Easily convet yout paper document into a digitized into a PDF file, looking shar
 ### <img src="https://use.fontawesome.com/releases/v5.1.0/svgs/solid/th-list.svg" width="22" align="left" /> &nbsp; Organize like a pro
 Categorize your documents for improved management and search
 
+<a href="https://github.com/clean-apps/CleanSCAN/releases/download/v1.0.20190406/clean-scan-v1.0.20190406.apk" target="_blank">
+<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" alt="Get it on Google Play" height="90"/></a>
+
 # License
 
 Copyright 2018 Shouvik Basu
