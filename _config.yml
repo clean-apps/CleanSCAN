@@ -6,3 +6,11 @@ title: Clean Scan
 description: A simple, fast and efficient document scanner for Android
 author:
   name: Shouvik Basu
+
+navbar-links:
+  About Me: "aboutme"
+  Resources:
+    - Beautiful Jekyll: "http://deanattali.com/beautiful-jekyll/"
+    - Learn markdown: "http://www.markdowntutorial.com/"
+    - GitHub Pages: "https://pages.github.com/"
+Author's home: "http://deanattali.com"
