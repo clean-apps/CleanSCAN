@@ -1,5 +1,5 @@
 theme: jekyll-theme-minimal
-baseurl: /
+baseurl: /CleanSCAN
 show_downloads: true
 
 logo: /app/src/main/ic_launcher-web.png
