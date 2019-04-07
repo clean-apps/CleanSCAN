@@ -5,26 +5,32 @@
 <img src="https://github.com/clean-apps/CleanSCAN/raw/master/branding/clean%20scan%20branding3.png?raw=true" width="600"/>
 </p>
 
-#  A simple, fast and efficient document scanner for Android 
+# A simple, smart and efficient document scanner for Android
 
 Clean Scan is a mobile document scanner, easily digitize your paper documents into pdfs. With tons of features, document scanning has never been easier. The best part is, it's open source with apache licence.
 
 ### <img src="https://use.fontawesome.com/releases/v5.1.0/svgs/solid/crop-alt.svg" width="22" align="left" /> &nbsp; Auto-Edge Cropping
+
 Automatically detects edges from the image, so you don't have to
 
 ### <img src="https://use.fontawesome.com/releases/v5.1.0/svgs/solid/font.svg" width="22" align="left" /> &nbsp; Quickly OCR, Extract text from Images
+
 No more typing, it can automatically extract text from images
 
 ### <img src="https://use.fontawesome.com/releases/v5.1.0/svgs/solid/bolt.svg" width="22" align="left" /> &nbsp; Auto-enhance image quality
+
 No more low light or bad photos, it can auto-enhance the image quality for best perfomances
 
 ### <img src="https://use.fontawesome.com/releases/v5.1.0/svgs/solid/share.svg" width="22" align="left" /> &nbsp; Share your scans
+
 Share with your friends via email, whatsapp, messenger or and via link to other social networks
 
 ### <img src="https://use.fontawesome.com/releases/v5.1.0/svgs/solid/file-pdf.svg" width="22" align="left" /> &nbsp; Create PDFs from Documents
+
 Easily convet yout paper document into a digitized into a PDF file, looking sharp and clean.
 
 ### <img src="https://use.fontawesome.com/releases/v5.1.0/svgs/solid/th-list.svg" width="22" align="left" /> &nbsp; Organize like a pro
+
 Categorize your documents for improved management and search
 
 <a href="https://github.com/clean-apps/CleanSCAN/releases/download/v1.0.20190406/clean-scan-v1.0.20190406.apk" target="_blank">
@@ -34,16 +40,16 @@ Categorize your documents for improved management and search
 
 Copyright 2018 Shouvik Basu
 
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
 
        http://www.apache.org/licenses/LICENSE-2.0
 
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
 limitations under the License.
 
 _This project uses scanLibrary by Jhansi Karee, licenced under MIT_
@@ -67,8 +73,8 @@ _This project uses scanLibrary by Jhansi Karee, licenced under MIT_
     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
-	
- _This project uses OpenCV Android, licenced under BSD_
+
+_This project uses OpenCV Android, licenced under BSD_
 
     Copyright (C) 2000-2019, Intel Corporation, all rights reserved.
     Copyright (C) 2009-2011, Willow Garage Inc., all rights reserved.
@@ -89,7 +95,7 @@ _This project uses scanLibrary by Jhansi Karee, licenced under MIT_
 _Launcher Icon has been done by Artem Usachov, and has been used under Creative Commons License_
 
     OCR File by Artem Usachov from the Noun Project
-    
+
 _On-Boarding Artwork has been done by Katerina Limpitsouni,and has been used under an Open-Source License_
 
     Copyright 2018 Katerina Limpitsouni
@@ -103,11 +109,10 @@ _On-Boarding Artwork has been done by Katerina Limpitsouni,and has been used und
 
 # Credits
 
-* [Open CV Team](http://opencv.org/)
-* [Most Of the Original Work by Jhansi Karee](https://github.com/jhansireddy/AndroidScannerDemo)
-* [Camscanner Team for inspiring](https://www.camscanner.com/)
-* [Microsoft Office Lens Team for inspiring](https://www.microsoft.com/en-us/p/office-lens/9wzdncrfj3t8)
-* [Google Material.io Team for amazing icons](https://material.io/)
-* [Katerina Limpitsouni for amazing artwork](https://undraw.co/illustrations)
-* [Artem Usachov for inspiring the launcher icon](https://thenounproject.com/term/ocr-file/1839080/)
-
+- [Open CV Team](http://opencv.org/)
+- [Most Of the Original Work by Jhansi Karee](https://github.com/jhansireddy/AndroidScannerDemo)
+- [Camscanner Team for inspiring](https://www.camscanner.com/)
+- [Microsoft Office Lens Team for inspiring](https://www.microsoft.com/en-us/p/office-lens/9wzdncrfj3t8)
+- [Google Material.io Team for amazing icons](https://material.io/)
+- [Katerina Limpitsouni for amazing artwork](https://undraw.co/illustrations)
+- [Artem Usachov for inspiring the launcher icon](https://thenounproject.com/term/ocr-file/1839080/)

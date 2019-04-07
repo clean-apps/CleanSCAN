@@ -187,4 +187,22 @@
   .lead code {
     display: none;
   }
+
+  .features div {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .features div i {
+    font-size: 24px;
+    padding-right: 10px;
+  }
+
+  .features div p {
+    font-size: 24px;
+  }
+
+  .features div span {
+    flex-grow: 10;
+  }
 }
