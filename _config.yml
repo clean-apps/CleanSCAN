@@ -1,1 +1,8 @@
-theme: jekyll-theme-tactile
+theme: jekyll-theme-minimal
+show_downloads: true
+
+logo: /app/src/main/ic_launcher-web.png
+title: Clean Scan
+description: A simple, fast and efficient document scanner for Android
+author:
+  name: Shouvik Basu

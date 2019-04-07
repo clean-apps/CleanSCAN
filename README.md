@@ -1,6 +1,10 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![GitHub release](https://img.shields.io/github/release/clean-apps/CleanSCAN.svg)](https://github.com/clean-apps/CleanSCAN/releases/latest)
 
+<p align="center">
+<img src="https://github.com/clean-apps/CleanSCAN/raw/master/branding/clean%20scan%20branding3.png?raw=true" width="600"/>
+</p>
+
 #  A simple, fast and efficient document scanner for Android 
 
 Clean Scan is a mobile document scanner, easily digitize your paper documents into pdfs. With tons of features, document scanning has never been easier. The best part is, it's open source with apache licence.
@@ -23,9 +27,8 @@ Easily convet yout paper document into a digitized into a PDF file, looking shar
 ### <img src="https://use.fontawesome.com/releases/v5.1.0/svgs/solid/th-list.svg" width="22" align="left" /> &nbsp; Organize like a pro
 Categorize your documents for improved management and search
 
-# Screenshots
-
-//TODO
+<a href="https://github.com/clean-apps/CleanSCAN/releases/download/v1.0.20190406/clean-scan-v1.0.20190406.apk" target="_blank">
+<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" alt="Get it on Google Play" height="90"/></a>
 
 # License
 
