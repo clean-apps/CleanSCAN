@@ -157,11 +157,11 @@
   }
 
   .brand_caption {
-    display: none;
+    font-size: 5vw;
   }
 
   .brand_description {
-    font-size: 5vw;
+    display: none;
   }
 
   .brand_text_container {
