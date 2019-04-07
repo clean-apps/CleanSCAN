@@ -1,4 +1,5 @@
 theme: jekyll-theme-minimal
+baseurl: /
 show_downloads: true
 
 logo: /app/src/main/ic_launcher-web.png
