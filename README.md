@@ -9,22 +9,6 @@
 
 Clean Scan is a mobile document scanner, easily digitize your paper documents into pdfs. With tons of features, document scanning has never been easier. The best part is, it's open source with apache licence.
 
-### <img src="https://use.fontawesome.com/releases/v5.1.0/svgs/solid/crop-alt.svg" width="22" align="left" /> &nbsp; Auto-Edge Cropping
-
-Automatically detects edges from the image, so you don't have to
-
-### <img src="https://use.fontawesome.com/releases/v5.1.0/svgs/solid/font.svg" width="22" align="left" /> &nbsp; Quickly OCR, Extract text from Images
-
-No more typing, it can automatically extract text from images
-
-### <img src="https://use.fontawesome.com/releases/v5.1.0/svgs/solid/bolt.svg" width="22" align="left" /> &nbsp; Auto-enhance image quality
-
-No more low light or bad photos, it can auto-enhance the image quality for best perfomances
-
-### <img src="https://use.fontawesome.com/releases/v5.1.0/svgs/solid/share.svg" width="22" align="left" /> &nbsp; Share your scans
-
-Share with your friends via email, whatsapp, messenger or and via link to other social networks
-
 ### <img src="https://use.fontawesome.com/releases/v5.1.0/svgs/solid/file-pdf.svg" width="22" align="left" /> &nbsp; Create PDFs from Documents
 
 Easily convet yout paper document into a digitized into a PDF file, looking sharp and clean.
@@ -33,12 +17,28 @@ Easily convet yout paper document into a digitized into a PDF file, looking shar
 
 Categorize your documents for improved management and search
 
+### <img src="https://use.fontawesome.com/releases/v5.1.0/svgs/solid/share.svg" width="22" align="left" /> &nbsp; Share your scans
+
+Share with your friends via email, whatsapp, messenger or and via link to other social networks
+
+### <img src="https://use.fontawesome.com/releases/v5.1.0/svgs/solid/bolt.svg" width="22" align="left" /> &nbsp; Auto-enhance image quality
+
+No more low light or bad photos, it can auto-enhance the image quality for best perfomances
+
+### <img src="https://use.fontawesome.com/releases/v5.1.0/svgs/solid/crop-alt.svg" width="22" align="left" /> &nbsp; Auto-Edge Cropping
+
+Automatically detects edges from the image, so you don't have to
+
+### <img src="https://use.fontawesome.com/releases/v5.1.0/svgs/solid/font.svg" width="22" align="left" /> &nbsp; Quickly OCR, Extract text from Images
+
+No more typing, it can automatically extract text from images
+
 <a href="https://github.com/clean-apps/CleanSCAN/releases/download/v1.0.20190406/clean-scan-v1.0.20190406.apk" target="_blank">
 <img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" alt="Get it on Google Play" height="90"/></a>
 
 # License
 
-Copyright 2018 Shouvik Basu
+Clean Scan App, Copyright 2018 Shouvik Basu
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
