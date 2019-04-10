@@ -33,7 +33,7 @@ Automatically detects edges from the image, so you don't have to
 
 No more typing, it can automatically extract text from images
 
-<a href="https://github.com/clean-apps/CleanSCAN/releases/download/v1.0.20190406/clean-scan-v1.0.20190406.apk" target="_blank">
+<a href="https://play.google.com/store/apps/details?id=com.babanomania.pdfscanner" target="_blank">
 <img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" alt="Get it on Google Play" height="90"/></a>
 
 # License
