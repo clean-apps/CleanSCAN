@@ -6,8 +6,8 @@ android {
         applicationId "com.babanomania.pdfscanner"
         minSdkVersion 24
         targetSdkVersion 28
-        versionCode 1
-        versionName "1.0.20190406"
+        versionCode 2
+        versionName "1.0.20190411"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -33,5 +33,10 @@ dependencies {
     annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
     implementation 'android.arch.lifecycle:extensions:1.1.0'
     implementation 'android.arch.lifecycle:viewmodel:1.1.0'
-    implementation 'com.google.android.gms:play-services-vision:11.8.0'
+    //implementation 'com.google.android.gms:play-services-vision:11.8.0'
+    implementation 'com.google.firebase:firebase-core:16.0.8'
+    implementation 'com.google.firebase:firebase-ml-vision:19.0.3'
 }
+
+apply plugin: 'com.google.gms.google-services'
+com.google.gms.googleservices.GoogleServicesPlugin.config.disableVersionCheck = true
