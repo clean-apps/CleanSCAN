@@ -132,4 +132,4 @@ _TedPermission is created by Ted Park under Apache 2 license_
 - [Google Material.io Team for amazing icons](https://material.io/)
 - [Katerina Limpitsouni for amazing artwork](https://undraw.co/illustrations)
 - [Artem Usachov for inspiring the launcher icon](https://thenounproject.com/term/ocr-file/1839080/)
-- [This Great Permission library by Ted Parker](https://github.com/ParkSangGwon/TedPermission)
+- [This Great Permission library by Ted Park](https://github.com/ParkSangGwon/TedPermission)
