@@ -1,5 +1,6 @@
 package com.babanomania.pdfscanner;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.arch.lifecycle.LiveData;
@@ -41,6 +42,8 @@ import com.babanomania.pdfscanner.utils.UIUtil;
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.TedPermission;
 import com.scanlibrary.ScanActivity;
 import com.scanlibrary.ScanConstants;
 
