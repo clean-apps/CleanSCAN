@@ -20,6 +20,19 @@ public class PermissionUtil {
     public static void ask(final Activity activity ){
 
         TedPermission.with( activity.getApplicationContext() )
+                .setPermissionListener(new PermissionListener() {
+                    @Override
+                    public void onPermissionGranted() {
+                        //Toast.makeText(activity, "Permission Granted", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onPermissionDenied(List<String> deniedPermissions) {
+                        Toast.makeText(activity, "Permission Denied\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
+                    }
+
+
+                })
                 .setDeniedMessage(
                         "If you reject permission,you can not use this service\n\n" +
                         "Please turn on permissions at [Setting] > [Permission]")
