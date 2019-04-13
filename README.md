@@ -107,6 +107,22 @@ _On-Boarding Artwork has been done by Katerina Limpitsouni,and has been used und
 
     Are registered trademarks of their respected owners. Are included on a promotional basis and do not represent an association with unDraw or its users. Do not indicate any kind of endorsement of the trademark holder towards unDraw, nor vice versa. Are provided with the sole purpose to represent the actual brand/service/company that has registered the trademark and must not be used otherwise.
 
+_TedPermission is created by TedParker under Apache 2 license_
+
+       Copyright 2017 Ted Park
+
+       Licensed under the Apache License, Version 2.0 (the "License");
+       you may not use this file except in compliance with the License.
+       You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+       Unless required by applicable law or agreed to in writing, software
+       distributed under the License is distributed on an "AS IS" BASIS,
+       WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+       See the License for the specific language governing permissions and
+       limitations under the License.
+
 # Credits
 
 - [Open CV Team](http://opencv.org/)
@@ -116,3 +132,4 @@ _On-Boarding Artwork has been done by Katerina Limpitsouni,and has been used und
 - [Google Material.io Team for amazing icons](https://material.io/)
 - [Katerina Limpitsouni for amazing artwork](https://undraw.co/illustrations)
 - [Artem Usachov for inspiring the launcher icon](https://thenounproject.com/term/ocr-file/1839080/)
+- [This Great Permission library by Ted Parker](https://github.com/ParkSangGwon/TedPermission)
