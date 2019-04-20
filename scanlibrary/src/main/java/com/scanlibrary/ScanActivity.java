@@ -2,6 +2,7 @@ package com.scanlibrary;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.ComponentCallbacks2;
 import android.graphics.Bitmap;
@@ -36,7 +37,17 @@ public class ScanActivity extends Activity implements IScanner, ComponentCallbac
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        finish();
+
+        final android.app.FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+                if( fragmentManager.getBackStackEntryCount() <= 1 ){
+                    finish();
+                }
+            }
+        });
+
     }
 
     protected int getPreferenceContent() {
@@ -52,7 +63,7 @@ public class ScanActivity extends Activity implements IScanner, ComponentCallbac
         android.app.FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.content, fragment);
-        fragmentTransaction.addToBackStack(ScanFragment.class.toString());
+        //fragmentTransaction.addToBackStack(ScanFragment.class.toString());
         fragmentTransaction.commit();
     }
 
