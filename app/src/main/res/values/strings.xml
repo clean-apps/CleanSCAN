@@ -2,45 +2,45 @@
     <string name="app_name">Clean Scan</string>
     <string name="base_storage_path">PDF Scanner/data/</string>
     <string name="base_staging_path">PDF Scanner/stage/</string>
-    <string name="search_hint">Search Documents</string>
+    <string name="search_hint">Recherche de documents</string>
 
-    <string name="scan_shortcut_short_label">New Document</string>
-    <string name="scan_shortcut_long_label">Scan A New Document</string>
-    <string name="scan_disabled_message">Scanning Disabled</string>
+    <string name="scan_shortcut_short_label">Nouveau document</string>
+    <string name="scan_shortcut_long_label">Scanner un document</string>
+    <string name="scan_disabled_message">Numérisation désactivée</string>
 
-    <string name="ocr_waiting_text">Extracting Text, Please Wait ...</string>
-    <string name="ocr_failed_text">Unable to Extract Any Text.</string>
-    <string name="ocr_title">Automatic Text Extraction</string>
+    <string name="ocr_waiting_text">Extraction du texte, veuillez patienter ...</string>
+    <string name="ocr_failed_text">Impossible d'extraire le texte.</string>
+    <string name="ocr_title">Extraction automatique de texte</string>
 
-    <string name="menu_delete">Delete</string>
-    <string name="menu_rename">Rename</string>
-    <string name="menu_search">Search</string>
-    <string name="menu_ocr">Extract Text</string>
+    <string name="menu_delete">Supprimer</string>
+    <string name="menu_rename">Renommer</string>
+    <string name="menu_search">Chercher</string>
+    <string name="menu_ocr">Extraire le texte</string>
 
-    <string name="intro_title1">Scan Documents</string>
-    <string name="intro_desc1">Easily digitize all your physical documents by converting them to PDFs</string>
+    <string name="intro_title1">Numérisation de documents</string>
+    <string name="intro_desc1">Numériser facilement tous vos documents papier en les convertissant en PDF</string>
 
-    <string name="intro_title2">Extract Texts</string>
-    <string name="intro_desc2">Share usable texts from documents, so that you don\'t have to type it ever again</string>
+    <string name="intro_title2">Extraction de textes</string>
+    <string name="intro_desc2">Partager les textes exploitables des documents, afin de ne plus jamais avoir à les taper</string>
 
-    <string name="intro_title3">Organize Better</string>
-    <string name="intro_desc3">Categorize easily, and manage your document clutter much better</string>
+    <string name="intro_title3">Meilleure organisation</string>
+    <string name="intro_desc3">Catégoriser facilement, et gérer plus finement la masse de vos documents</string>
 
     <string-array name="category_array">
-        <item>Others</item>
-        <item>Shopping</item>
-        <item>Vehicle</item>
-        <item>Medical</item>
-        <item>Legal</item>
-        <item>Housing</item>
-        <item>Books</item>
-        <item>Food</item>
-        <item>Banking</item>
-        <item>Receipts</item>
-        <item>Manuals</item>
-        <item>Travel</item>
+        <item>Autres</item>
+        <item>Achats</item>
+        <item>Auto</item>
+        <item>Médical</item>
+        <item>Juridique</item>
+        <item>Logement</item>
+        <item>Livres</item>
+        <item>Nourriture</item>
+        <item>Banque</item>
+        <item>Reçus</item>
+        <item>Documentation</item>
+        <item>Voyages</item>
         <item>Notes</item>
-        <item>ID</item>
+        <item>Administratif</item>
     </string-array>
 
 </resources>
