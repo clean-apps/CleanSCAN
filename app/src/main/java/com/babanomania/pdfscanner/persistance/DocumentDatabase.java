@@ -1,9 +1,10 @@
 package com.babanomania.pdfscanner.persistance;
 
-import android.arch.persistence.room.Database;
-import android.arch.persistence.room.Room;
-import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
+
+import androidx.room.Database;
+import androidx.room.Room;
+import androidx.room.RoomDatabase;
 
 @Database(entities = {Document.class}, version = 2, exportSchema = false)
 public abstract class DocumentDatabase extends RoomDatabase {

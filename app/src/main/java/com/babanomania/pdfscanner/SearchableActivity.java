@@ -2,20 +2,21 @@ package com.babanomania.pdfscanner;
 
 import android.app.SearchManager;
 import android.app.SearchableInfo;
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.support.v7.widget.SearchView;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.SearchView;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.babanomania.pdfscanner.fileView.FLAdapter;
 import com.babanomania.pdfscanner.persistance.Document;
@@ -28,7 +29,7 @@ public class SearchableActivity extends AppCompatActivity {
 
 
     private LinearLayout emptyLayout;
-    private  RecyclerView recyclerView;
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -7,17 +7,15 @@ import android.graphics.pdf.PdfRenderer;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.ParcelFileDescriptor;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.babanomania.pdfscanner.utils.OCRUtils;
 import com.babanomania.pdfscanner.utils.UIUtil;
