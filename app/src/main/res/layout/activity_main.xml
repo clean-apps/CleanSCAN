@@ -29,12 +29,12 @@
             android:text="scan"
             android:textColor="@android:color/white"></Button>
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rw"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/empty_list">
-        </android.support.v7.widget.RecyclerView>
+        </androidx.recyclerview.widget.RecyclerView>
 
         <LinearLayout
             android:id="@+id/empty_list"
