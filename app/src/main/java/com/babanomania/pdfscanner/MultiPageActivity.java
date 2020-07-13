@@ -1,12 +1,15 @@
 package com.babanomania.pdfscanner;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.FileProvider;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.DataSetObserver;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -15,6 +18,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.ActionMode;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -22,6 +28,7 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,11 +37,14 @@ import com.scanlibrary.ScanActivity;
 import com.scanlibrary.ScanConstants;
 
 import java.io.File;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MultiPageActivity extends AppCompatActivity {
 
-    GridView pagesGridView;
+    private GridView pagesGridView;
+    private List<String> selectedIndexes = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +57,11 @@ public class MultiPageActivity extends AppCompatActivity {
         final List<File> stagingFiles = FileIOUtils.getAllFiles( stagingDirPath );
 
         pagesGridView = (GridView) findViewById(R.id.multi_page_grid);
-        pagesGridView.setAdapter(new ImageAdapterGridView(this));
+
+        final BaseAdapter gvAdapter = new ImageAdapterGridView(this);
+        pagesGridView.setAdapter(gvAdapter);
+
+        selectedIndexes.clear();
 
         pagesGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -72,6 +86,50 @@ public class MultiPageActivity extends AppCompatActivity {
                     }
 
                 }
+            }
+        });
+
+        pagesGridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int position, long id) {
+
+                if( selectedIndexes.contains( String.valueOf(position) ) ){
+                    selectedIndexes.remove( String.valueOf(position) );
+                    view.setForeground(getDrawable(R.drawable.image_overlay));
+                    startActionMode(new ActionMode.Callback() {
+                        @Override
+                        public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+                            actionMode.getMenuInflater().inflate(R.menu.delete_menu, menu);
+                            return true;
+                        }
+
+                        @Override
+                        public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+
+                            stagingFiles.get(position - 1).delete();
+                            actionMode.finish();
+                            gvAdapter.notifyDataSetChanged();
+                            return true;
+                        }
+
+                        @Override
+                        public void onDestroyActionMode(ActionMode actionMode) {
+                            selectedIndexes.clear();
+                            gvAdapter.notifyDataSetChanged();
+                        }
+                    }, ActionMode.TYPE_PRIMARY);
+
+                } else {
+                    selectedIndexes.add( String.valueOf(position) );
+                    view.setForeground(null);
+                }
+
+                return true;
             }
         });
     }
@@ -104,6 +162,7 @@ public class MultiPageActivity extends AppCompatActivity {
 
     public class ImageAdapterGridView extends BaseAdapter {
         private Context mContext;
+        private GridView mGridView;
         private List<File> stagingFiles;
 
         public ImageAdapterGridView(Context c) {
@@ -111,6 +170,14 @@ public class MultiPageActivity extends AppCompatActivity {
 
             final String stagingDirPath =  getApplicationContext().getString( R.string.base_staging_path);
             stagingFiles = FileIOUtils.getAllFiles( stagingDirPath );
+
+            registerDataSetObserver(new DataSetObserver() {
+                @Override
+                public void onChanged() {
+                    super.onChanged();
+                    stagingFiles = FileIOUtils.getAllFiles( stagingDirPath );
+                }
+            });
         }
 
         public int getCount() {
@@ -122,57 +189,38 @@ public class MultiPageActivity extends AppCompatActivity {
         }
 
         public long getItemId(int position) {
-            return 0;
+            return Long.valueOf(position);
         }
 
         public View getView(int position, View convertView, ViewGroup parent) {
 
-            ImageView mImageView;
-
             DisplayMetrics displayMetrics = new DisplayMetrics();
             getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-            int imgSize = displayMetrics.widthPixels / 3;
+
+            int width = (displayMetrics.widthPixels - 100 )/ 3;
+            int height = ( width / 3 ) * 4;
 
             if ( position == 0 ){
 
                 View addMoreView = getLayoutInflater().inflate(R.layout.add_more_img, null);
-                addMoreView.setLayoutParams(new GridView.LayoutParams(imgSize, imgSize));
-                addMoreView.setPadding(25, 25, 25, 25);
+                addMoreView.setLayoutParams(new GridView.LayoutParams(width, height));
                 return addMoreView;
 
             }else {
-
-//                if (convertView == null || convertView instanceof LinearLayout ) {
-//
-//                    View eachFileView = getLayoutInflater().inflate(R.layout.each_file_img, null);
-//                    ImageView imageView = eachFileView.findViewById(R.id.each_file_screenshot);
-//                    eachFileView.setLayoutParams(new GridView.LayoutParams(imgSize, imgSize));
-//                    eachFileView.setPadding(25, 25, 25, 25);
-//
-//                    mImageView = new ImageView(mContext);
-//                    mImageView.setLayoutParams(new GridView.LayoutParams(imgSize, imgSize));
-//                    mImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-//                    mImageView.setPadding(25, 25, 25, 25);
-//                    mImageView.setBackgroundResource(R.drawable.border_image);
-//
-//                } else {
-//                    mImageView = (ImageView) convertView;
-//                }
 
                 View eachFileView = getLayoutInflater().inflate(R.layout.each_file_img, null);
                 ImageView imageView = eachFileView.findViewById(R.id.each_file_screenshot);
                 TextView textView = eachFileView.findViewById(R.id.each_pageno);
 
-                int width = imgSize;
-                int height = ( imgSize / 3 ) * 4;
-
                 eachFileView.setLayoutParams(new GridView.LayoutParams( width, height )) ;
-                eachFileView.setPadding(25, 25, 25, 25);
-                eachFileView.setBackgroundResource(R.drawable.border_image);
 
                 File imgFile = stagingFiles.get( stagingFiles.size() - position );
                 Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                 imageView.setImageBitmap(myBitmap);
+
+                if( selectedIndexes.contains( String.valueOf(position - 1 ) ) ){
+                    eachFileView.setForeground(getDrawable(R.drawable.image_overlay));
+                }
 
                 textView.setText("Page " + (stagingFiles.size() - position  + 1 ) );
 

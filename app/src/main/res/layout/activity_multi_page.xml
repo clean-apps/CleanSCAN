@@ -16,9 +16,11 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:numColumns="3"
-            android:verticalSpacing="10dp"
-            android:horizontalSpacing="10dp"
+            android:verticalSpacing="5dp"
+            android:horizontalSpacing="5dp"
             android:paddingTop="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
             />
 
         <Button

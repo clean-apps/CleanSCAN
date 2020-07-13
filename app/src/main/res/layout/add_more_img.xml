@@ -5,7 +5,9 @@
     android:layout_height="fill_parent"
     android:padding=".5dp"
     android:orientation="vertical"
-    android:gravity="center_vertical|center_horizontal">
+    android:gravity="center_vertical|center_horizontal"
+    android:background="@drawable/dashed_border_image"
+    >
 
         <ImageView
             android:layout_width="60dp"

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <gradient
+        android:id="@+id/selected_overlay"
+        android:startColor="#408a1c44"
+        android:centerColor="#408a1c44"
+        android:endColor="#408a1c44"
+        />
+</shape>
