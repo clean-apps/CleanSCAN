@@ -1,15 +1,20 @@
 package com.babanomania.pdfscanner;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -38,6 +43,9 @@ public class MultiPageActivity extends AppCompatActivity {
 
         setTitle( getResources().getString(R.string.multi_page_title) );
 
+        final String stagingDirPath =  getApplicationContext().getString( R.string.base_staging_path);
+        final List<File> stagingFiles = FileIOUtils.getAllFiles( stagingDirPath );
+
         pagesGridView = (GridView) findViewById(R.id.multi_page_grid);
         pagesGridView.setAdapter(new ImageAdapterGridView(this));
 
@@ -48,7 +56,21 @@ public class MultiPageActivity extends AppCompatActivity {
                     scanMore(view);
 
                 }else {
-                    Toast.makeText(getBaseContext(), "Page No " + (position + 1) + " Clicked", Toast.LENGTH_LONG).show();
+
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+                    String newFileName = stagingFiles.get(position - 1).getPath();
+                    File toOpen = new File( newFileName );
+
+                    Uri sharedFileUri = FileProvider.getUriForFile(view.getContext(), "com.babanomania.pdfscanner.provider", toOpen);
+                    intent.setDataAndType( sharedFileUri, "image/png");
+                    PackageManager pm = view.getContext().getPackageManager();
+
+                    if (intent.resolveActivity(pm) != null) {
+                        view.getContext().startActivity(intent);
+                    }
+
                 }
             }
         });
