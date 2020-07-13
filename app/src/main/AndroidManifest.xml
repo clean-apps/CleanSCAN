@@ -14,7 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".IntroActivity"></activity>
+        <activity android:name=".MultiPageActivity"></activity>
+        <activity android:name=".IntroActivity" />
         <activity
             android:name=".SplashScreen"
             android:theme="@style/AppThemeSplash">
@@ -51,7 +52,7 @@
         </activity>
         <activity
             android:name=".OCRActivity"
-            android:parentActivityName=".MainActivity"></activity>
+            android:parentActivityName=".MainActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

@@ -6,6 +6,7 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
 import android.os.Environment;
@@ -82,6 +83,9 @@ public class MainActivity extends AppCompatActivity {
         final String baseStagingDirectory =  getApplicationContext().getString( R.string.base_staging_path);
         FileIOUtils.mkdir( baseStagingDirectory );
 
+        final String scanningTmpDirectory =  getApplicationContext().getString( R.string.base_scantmp_path);
+        FileIOUtils.mkdir( scanningTmpDirectory );
+
         this.emptyLayout = findViewById(R.id.empty_list);
 
         viewModel = ViewModelProviders.of(this).get(DocumentViewModel.class);
@@ -126,17 +130,28 @@ public class MainActivity extends AppCompatActivity {
 
     public void openCamera(View v){
         scannedBitmaps.clear();
+
+        String stagingDirPath = getApplicationContext().getString( R.string.base_staging_path );
+        String scanningTmpDirectory =  getApplicationContext().getString( R.string.base_scantmp_path);
+
+        FileIOUtils.clearDirectory( stagingDirPath );
+        FileIOUtils.clearDirectory( scanningTmpDirectory );
+
         Intent intent = new Intent(this, ScanActivity.class);
         intent.putExtra(ScanConstants.OPEN_INTENT_PREFERENCE, ScanConstants.OPEN_CAMERA);
         startActivityForResult(intent, ScanConstants.START_CAMERA_REQUEST_CODE);
     }
 
-    public void openGallery(View v){
-        scannedBitmaps.clear();
-        Intent intent = new Intent(this, ScanActivity.class);
-        intent.putExtra(ScanConstants.OPEN_INTENT_PREFERENCE, ScanConstants.OPEN_MEDIA);
-        startActivityForResult(intent, ScanConstants.PICKFILE_REQUEST_CODE);
-    }
+//    public void openGallery(View v){
+//        scannedBitmaps.clear();
+//
+//        String stagingDirPath = getApplicationContext().getString( R.string.base_staging_path );
+//        FileIOUtils.clearDirectory( stagingDirPath );
+//
+//        Intent intent = new Intent(this, ScanActivity.class);
+//        intent.putExtra(ScanConstants.OPEN_INTENT_PREFERENCE, ScanConstants.OPEN_MEDIA);
+//        startActivityForResult(intent, ScanConstants.PICKFILE_REQUEST_CODE);
+//    }
 
     private void saveBitmap( final Bitmap bitmap, final boolean addMore ){
 
@@ -151,10 +166,11 @@ public class MainActivity extends AppCompatActivity {
                 try {
 
                     String filename = "SCANNED_STG_" + timestamp + ".png";
+
                     FileIOUtils.writeFile(baseDirectory, filename, new FileWritingCallback() {
                         @Override
                         public void write(FileOutputStream out) {
-                            bitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
+                            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
                         }
                     });
 
@@ -230,6 +246,71 @@ public class MainActivity extends AppCompatActivity {
             }
     }
 
+    private void savePdf() {
+
+        final String baseDirectory = getApplicationContext().getString(R.string.base_storage_path);
+        final File sd = Environment.getExternalStorageDirectory();
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy_hh-mm-ss");
+        final String timestamp = simpleDateFormat.format(new Date());
+
+
+        DialogUtil.askUserFilaname(c, null, null, new DialogUtilCallback() {
+
+            @Override
+            public void onSave(String textValue, String category) {
+                try {
+
+                    final PDFWriterUtil pdfWriter = new PDFWriterUtil();
+
+                    String stagingDirPath = getApplicationContext().getString(R.string.base_staging_path);
+
+                    List<File> stagingFiles = FileIOUtils.getAllFiles(stagingDirPath);
+                    for (File stagedFile : stagingFiles) {
+                        pdfWriter.addFile(stagedFile);
+                    }
+
+                    String filename = "SCANNED_" + timestamp + ".pdf";
+                    FileIOUtils.writeFile(baseDirectory, filename, new FileWritingCallback() {
+                        @Override
+                        public void write(FileOutputStream out) {
+                            try {
+                                pdfWriter.write(out);
+
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+
+
+                    fileAdapter.notifyDataSetChanged();
+
+                    FileIOUtils.clearDirectory(stagingDirPath);
+
+                    SimpleDateFormat simpleDateFormatView = new SimpleDateFormat("dd-MM-yyyy hh:mm");
+                    final String timestampView = simpleDateFormatView.format(new Date());
+
+                    Document newDocument = new Document();
+                    newDocument.setName(textValue);
+                    newDocument.setCategory(category);
+                    newDocument.setPath(filename);
+                    newDocument.setScanned(timestampView);
+                    newDocument.setPageCount(pdfWriter.getPageCount());
+                    viewModel.saveDocument(newDocument);
+
+                    pdfWriter.close();
+
+                    System.gc();
+
+                } catch (IOException ioe) {
+                    ioe.printStackTrace();
+
+                }
+            }
+        });
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -237,24 +318,31 @@ public class MainActivity extends AppCompatActivity {
         if ( ( requestCode == ScanConstants.PICKFILE_REQUEST_CODE || requestCode == ScanConstants.START_CAMERA_REQUEST_CODE ) &&
                 resultCode == Activity.RESULT_OK) {
 
-            Uri uri = data.getExtras().getParcelable( ScanConstants.SCANNED_RESULT );
-            boolean doScanMore = data.getExtras().getBoolean( ScanConstants.SCAN_MORE );
 
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-                saveBitmap( bitmap, doScanMore );
+            boolean saveMode = data.getExtras().containsKey(ScanConstants.SAVE_PDF) ? data.getExtras().getBoolean( ScanConstants.SAVE_PDF ) : Boolean.FALSE;
+            if(saveMode){
+                savePdf();
 
-                if( doScanMore ){
+            } else {
+                Uri uri = data.getExtras().getParcelable(ScanConstants.SCANNED_RESULT);
+                boolean doScanMore = data.getExtras().getBoolean(ScanConstants.SCAN_MORE);
+
+                final File sd = Environment.getExternalStorageDirectory();
+                File src = new File(sd, uri.getPath());
+                Bitmap bitmap = BitmapFactory.decodeFile(src.getAbsolutePath());
+
+                //Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                saveBitmap(bitmap, doScanMore);
+
+                if (doScanMore) {
                     scannedBitmaps.add(uri);
-                    Intent intent = new Intent(this, ScanActivity.class);
+                    Intent intent = new Intent(this, MultiPageActivity.class);
                     intent.putExtra(ScanConstants.OPEN_INTENT_PREFERENCE, ScanConstants.OPEN_CAMERA);
                     startActivityForResult(intent, ScanConstants.START_CAMERA_REQUEST_CODE);
                 }
 
                 //getContentResolver().delete(uri, null, null);
 
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         }
     }

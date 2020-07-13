@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/each_file_img"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+        <ImageView
+            android:id="@+id/each_file_screenshot"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:background="@drawable/ic_outline_add_color_24px">
+        </ImageView>
+
+        <TextView
+            android:id="@+id/each_pageno"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:textColor="@color/colorAccent"
+            android:text="Page XXX"
+            android:background="#CCFFFFFF"
+            android:layout_alignBottom="@id/each_file_screenshot"
+            android:gravity="center" />
+
+</RelativeLayout>

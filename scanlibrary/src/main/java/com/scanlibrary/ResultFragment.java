@@ -79,11 +79,18 @@ public class ResultFragment extends Fragment {
     }
 
     private Bitmap getBitmap() {
+
         Uri uri = getUri();
         try {
             original = Utils.getBitmap(getActivity(), uri);
-            getActivity().getContentResolver().delete(uri, null, null);
+
+            final File sd = Environment.getExternalStorageDirectory();
+            File fdelete = new File(sd, uri.getPath());
+            boolean isDeleted = fdelete.delete();
+
+            //getActivity().getContentResolver().delete(uri, null, null);
             return original;
+
         } catch (IOException e) {
             e.printStackTrace();
         }
