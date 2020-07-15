@@ -7,6 +7,10 @@
         <item name="android:textColor">@color/textColor</item>
         <item name="actionModeBackground">@color/colorPrimaryDark</item>
         <item name="actionMenuTextColor">@android:color/white</item>
+        <item name="android:windowActivityTransitions">true</item>
+        <item name="android:windowEnterTransition">@transition/fade</item>
+        <item name="android:windowExitTransition">@transition/fade</item>
+
     </style>
 
     <style name="AppThemeSearch" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -16,6 +20,9 @@
         <item name="android:textColor">@color/textColor</item>
         <item name="actionModeBackground">@color/colorPrimaryDark</item>
         <item name="actionMenuTextColor">@color/colorPrimary</item>
+        <item name="android:windowActivityTransitions">true</item>
+        <item name="android:windowEnterTransition">@transition/fade</item>
+        <item name="android:windowExitTransition">@transition/slide</item>
     </style>
 
     <style name="AppThemeSplash" parent="Theme.AppCompat.DayNight.NoActionBar">
@@ -24,6 +31,9 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:navigationBarColor">@color/colorPrimary</item>
+        <item name="android:windowActivityTransitions">true</item>
+        <item name="android:windowEnterTransition">@transition/fade</item>
+        <item name="android:windowExitTransition">@transition/slide</item>
     </style>
 
 </resources>

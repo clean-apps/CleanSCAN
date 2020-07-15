@@ -12,10 +12,13 @@ import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.transition.Explode;
 
 import java.io.File;
 import java.io.IOException;
@@ -75,7 +78,6 @@ public class ResultFragment extends Fragment {
         } else {
             pageNumber.setText( "1" );
         }
-
     }
 
     private Bitmap getBitmap() {

@@ -2,6 +2,7 @@ package com.babanomania.pdfscanner;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ActivityOptions;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.os.Bundle;
@@ -137,9 +139,13 @@ public class MainActivity extends AppCompatActivity {
         FileIOUtils.clearDirectory( stagingDirPath );
         FileIOUtils.clearDirectory( scanningTmpDirectory );
 
+
         Intent intent = new Intent(this, ScanActivity.class);
         intent.putExtra(ScanConstants.OPEN_INTENT_PREFERENCE, ScanConstants.OPEN_CAMERA);
-        startActivityForResult(intent, ScanConstants.START_CAMERA_REQUEST_CODE);
+
+        //startActivityForResult(intent, ScanConstants.START_CAMERA_REQUEST_CODE);
+        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this);
+        startActivityForResult(intent, ScanConstants.START_CAMERA_REQUEST_CODE, options.toBundle());
     }
 
 //    public void openGallery(View v){
@@ -338,11 +344,11 @@ public class MainActivity extends AppCompatActivity {
                     scannedBitmaps.add(uri);
                     Intent intent = new Intent(this, MultiPageActivity.class);
                     intent.putExtra(ScanConstants.OPEN_INTENT_PREFERENCE, ScanConstants.OPEN_CAMERA);
+
                     startActivityForResult(intent, ScanConstants.START_CAMERA_REQUEST_CODE);
                 }
 
                 //getContentResolver().delete(uri, null, null);
-
             }
         }
     }

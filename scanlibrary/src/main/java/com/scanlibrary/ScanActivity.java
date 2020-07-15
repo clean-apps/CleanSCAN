@@ -7,8 +7,14 @@ import android.app.FragmentTransaction;
 import android.content.ComponentCallbacks2;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.transition.Fade;
+import android.transition.Slide;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.Window;
+
 
 /**
  * Created by jhansi on 28/03/15.
@@ -18,6 +24,20 @@ public class ScanActivity extends Activity implements IScanner, ComponentCallbac
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+            // inside your activity (if you did not enable transitions in your theme)
+            getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+
+            // set an exit transition
+            Fade fade = new Fade();
+            fade.setDuration(1000);
+
+            getWindow().setEnterTransition(fade);
+            getWindow().setExitTransition(fade);
+        }
+
         setContentView(R.layout.scan_layout);
         init();
         Utils.setLightNavigationBar( findViewById(android.R.id.content), this );

@@ -6,6 +6,7 @@ import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -14,6 +15,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.DisplayMetrics;
@@ -157,7 +159,10 @@ public class MultiPageActivity extends AppCompatActivity {
     public void scanMore(View view) {
         Intent intent = new Intent(this, ScanActivity.class);
         intent.putExtra(ScanConstants.OPEN_INTENT_PREFERENCE, ScanConstants.OPEN_CAMERA);
-        startActivityForResult(intent, ScanConstants.START_CAMERA_REQUEST_CODE);
+
+        //startActivityForResult(intent, ScanConstants.START_CAMERA_REQUEST_CODE);
+        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this);
+        startActivityForResult(intent, ScanConstants.START_CAMERA_REQUEST_CODE, options.toBundle());
     }
 
     public class ImageAdapterGridView extends BaseAdapter {
