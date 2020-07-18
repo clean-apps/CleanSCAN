@@ -2,13 +2,19 @@ package com.scanlibrary;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.hardware.Camera;
+import android.hardware.camera2.CameraMetadata;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +28,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * Created by jhansi on 04/04/15.
@@ -177,14 +184,32 @@ public class PickImageFragment extends Fragment {
     }
 
     private Bitmap getBitmap(Uri selectedimg) throws IOException {
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inSampleSize = 3;
-        AssetFileDescriptor fileDescriptor = null;
-        fileDescriptor =
-                getActivity().getContentResolver().openAssetFileDescriptor(selectedimg, "r");
-        Bitmap original
-                = BitmapFactory.decodeFileDescriptor(
-                fileDescriptor.getFileDescriptor(), null, options);
-        return original;
+
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getContext() );
+        String imageQuality = sharedPref.getString("IMAGE_QUALITY", "FAST"); // "FAST", "HIGH", "HIGHEST"
+
+        if( "HIGHEST".equals(imageQuality) ){
+            return BitmapFactory.decodeFile(selectedimg.getPath());
+
+        } else if( "BETTER".equals(imageQuality) ){
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = 2;
+
+            ContentResolver resolver = getActivity().getContentResolver();
+            AssetFileDescriptor fileDescriptor = resolver.openAssetFileDescriptor(selectedimg, "r");
+            return BitmapFactory.decodeFileDescriptor(
+                    fileDescriptor.getFileDescriptor(), null, options
+            );
+
+        } else {
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = 3;
+
+            ContentResolver resolver = getActivity().getContentResolver();
+            AssetFileDescriptor fileDescriptor = resolver.openAssetFileDescriptor(selectedimg, "r");
+            return BitmapFactory.decodeFileDescriptor(
+                    fileDescriptor.getFileDescriptor(), null, options
+            );
+        }
     }
 }

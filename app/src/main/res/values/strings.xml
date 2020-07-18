@@ -17,6 +17,7 @@
     <string name="menu_rename">Rename</string>
     <string name="menu_search">Search</string>
     <string name="menu_ocr">Extract Text</string>
+    <string name="menu_settings">Settings</string>
 
     <string name="intro_title1">Scan Documents</string>
     <string name="intro_desc1">Easily digitize all your physical documents by converting them to PDFs</string>
@@ -43,5 +44,11 @@
         <item>Notes</item>
         <item>ID</item>
     </string-array>
+
+    <string name="title_activity_settings">Settings</string>
+    <string name="scanning_header">Scanning</string>
+    <string name="image_quality_title">Image Quality</string>
+    <string name="key_image_quality">IMAGE_QUALITY</string>
+    <string name="value_image_quality">FAST</string>
 
 </resources>

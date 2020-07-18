@@ -9,4 +9,10 @@
         android:title="@string/menu_search"
         app:showAsAction="always"/>
 
+    <item android:id="@+id/show_prefrences"
+        android:iconTint="@android:color/white"
+        android:onClick="goToPreferences"
+        android:title="@string/menu_settings"
+        app:showAsAction="never"/>
+
 </menu>

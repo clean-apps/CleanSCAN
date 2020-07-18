@@ -1,0 +1,16 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory app:title="@string/scanning_header">
+
+        <ListPreference
+            app:icon="@drawable/ic_menu_img_quality"
+            app:defaultValue="@string/value_image_quality"
+            app:entries="@array/image_quality_entries"
+            app:entryValues="@array/image_quality_values"
+            app:key="@string/key_image_quality"
+            app:title="@string/image_quality_title"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

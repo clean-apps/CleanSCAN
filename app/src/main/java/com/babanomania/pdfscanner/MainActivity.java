@@ -130,6 +130,12 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(intent, 0);
     }
 
+
+    public void goToPreferences(MenuItem mi){
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivityForResult(intent, 0);
+    }
+
     public void openCamera(View v){
         scannedBitmaps.clear();
 
