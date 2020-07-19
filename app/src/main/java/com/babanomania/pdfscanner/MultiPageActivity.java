@@ -45,9 +45,6 @@ import java.util.List;
 
 public class MultiPageActivity extends AppCompatActivity {
 
-    private GridView pagesGridView;
-    private List<String> selectedIndexes = new ArrayList<String>();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,80 +55,15 @@ public class MultiPageActivity extends AppCompatActivity {
         final String stagingDirPath =  getApplicationContext().getString( R.string.base_staging_path);
         final List<File> stagingFiles = FileIOUtils.getAllFiles( stagingDirPath );
 
-        pagesGridView = (GridView) findViewById(R.id.multi_page_grid);
-
+        final GridView pagesGridView = (GridView) findViewById(R.id.multi_page_grid);
         final BaseAdapter gvAdapter = new ImageAdapterGridView(this);
         pagesGridView.setAdapter(gvAdapter);
-
-        selectedIndexes.clear();
 
         pagesGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                if(position == 0){
-                    scanMore(view);
-
-                }else {
-
-                    Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-                    String newFileName = stagingFiles.get(position - 1).getPath();
-                    File toOpen = new File( newFileName );
-
-                    Uri sharedFileUri = FileProvider.getUriForFile(view.getContext(), "com.babanomania.pdfscanner.provider", toOpen);
-                    intent.setDataAndType( sharedFileUri, "image/png");
-                    PackageManager pm = view.getContext().getPackageManager();
-
-                    if (intent.resolveActivity(pm) != null) {
-                        view.getContext().startActivity(intent);
-                    }
-
-                }
-            }
-        });
-
-        pagesGridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int position, long id) {
-
-                if( selectedIndexes.contains( String.valueOf(position) ) ){
-                    selectedIndexes.remove( String.valueOf(position) );
-                    view.setForeground(getDrawable(R.drawable.image_overlay));
-                    startActionMode(new ActionMode.Callback() {
-                        @Override
-                        public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
-                            actionMode.getMenuInflater().inflate(R.menu.delete_menu, menu);
-                            return true;
-                        }
-
-                        @Override
-                        public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
-                            return false;
-                        }
-
-                        @Override
-                        public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
-
-                            stagingFiles.get(position - 1).delete();
-                            actionMode.finish();
-                            gvAdapter.notifyDataSetChanged();
-                            return true;
-                        }
-
-                        @Override
-                        public void onDestroyActionMode(ActionMode actionMode) {
-                            selectedIndexes.clear();
-                            gvAdapter.notifyDataSetChanged();
-                        }
-                    }, ActionMode.TYPE_PRIMARY);
-
-                } else {
-                    selectedIndexes.add( String.valueOf(position) );
-                    view.setForeground(null);
-                }
-
-                return true;
+                if(position == 0) scanMore(view);
+                else showImage(stagingFiles, position, view);
             }
         });
     }
@@ -160,9 +92,24 @@ public class MultiPageActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ScanActivity.class);
         intent.putExtra(ScanConstants.OPEN_INTENT_PREFERENCE, ScanConstants.OPEN_CAMERA);
 
-        //startActivityForResult(intent, ScanConstants.START_CAMERA_REQUEST_CODE);
         ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this);
         startActivityForResult(intent, ScanConstants.START_CAMERA_REQUEST_CODE, options.toBundle());
+    }
+
+    public void showImage(List<File> stagingFiles, int position, View view) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        String newFileName = stagingFiles.get(position - 1).getPath();
+        File toOpen = new File( newFileName );
+
+        Uri sharedFileUri = FileProvider.getUriForFile(view.getContext(), "com.babanomania.pdfscanner.provider", toOpen);
+        intent.setDataAndType( sharedFileUri, "image/png");
+        PackageManager pm = view.getContext().getPackageManager();
+
+        if (intent.resolveActivity(pm) != null) {
+            view.getContext().startActivity(intent);
+        }
     }
 
     public class ImageAdapterGridView extends BaseAdapter {
@@ -197,7 +144,7 @@ public class MultiPageActivity extends AppCompatActivity {
             return Long.valueOf(position);
         }
 
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
 
             DisplayMetrics displayMetrics = new DisplayMetrics();
             getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -214,19 +161,27 @@ public class MultiPageActivity extends AppCompatActivity {
             }else {
 
                 View eachFileView = getLayoutInflater().inflate(R.layout.each_file_img, null);
-                ImageView imageView = eachFileView.findViewById(R.id.each_file_screenshot);
-                TextView textView = eachFileView.findViewById(R.id.each_pageno);
+                eachFileView.setLayoutParams(new GridView.LayoutParams( width, height ));
 
-                eachFileView.setLayoutParams(new GridView.LayoutParams( width, height )) ;
+                ImageView deleteButton = eachFileView.findViewById(R.id.each_file_delete);
+                deleteButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        stagingFiles.get( stagingFiles.size() - position ).delete();
+                        notifyDataSetChanged();
+                    }
+                });
+
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inSampleSize = 3;
 
                 File imgFile = stagingFiles.get( stagingFiles.size() - position );
-                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                Bitmap myBitmap = BitmapFactory.decodeFile( imgFile.getAbsolutePath(), options );
+
+                ImageView imageView = eachFileView.findViewById(R.id.each_file_screenshot);
                 imageView.setImageBitmap(myBitmap);
 
-                if( selectedIndexes.contains( String.valueOf(position - 1 ) ) ){
-                    eachFileView.setForeground(getDrawable(R.drawable.image_overlay));
-                }
-
+                TextView textView = eachFileView.findViewById(R.id.each_pageno);
                 textView.setText("Page " + (stagingFiles.size() - position  + 1 ) );
 
                 return eachFileView;

@@ -1,25 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/each_file_img"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@drawable/border_image">
+    android:layout_height="fill_parent">
 
-        <ImageView
-            android:id="@+id/each_file_screenshot"
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center_horizontal">
-        </ImageView>
+            app:cardCornerRadius="10dp"
+            android:background="@drawable/border_image">
 
-        <TextView
-            android:id="@+id/each_pageno"
-            android:layout_width="match_parent"
-            android:layout_height="25dp"
-            android:textColor="@color/colorAccent"
-            android:text="Page XXX"
-            android:background="#CCFFFFFF"
-            android:layout_alignBottom="@id/each_file_screenshot"
-            android:gravity="center" />
+                <TextView
+                    android:id="@+id/each_pageno"
+                    android:layout_width="match_parent"
+                    android:layout_height="25dp"
+                    android:elevation="10px"
+                    android:textColor="@color/colorAccent"
+                    android:text="Page XXX"
+                    android:background="#CCFFFFFF"
+                    android:layout_alignBottom="@id/each_file_screenshot"
+                    android:gravity="center">
+                </TextView>
+
+                <ImageView
+                    android:id="@+id/each_file_screenshot"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:gravity="center_horizontal">
+                </ImageView>
+
+        </androidx.cardview.widget.CardView>
+
+        <ImageView
+            android:id="@+id/each_file_delete"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="5dp"
+            android:padding="2dp"
+            android:elevation="10px"
+            android:src="@drawable/ic_menu_delete"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:background="#608a1c44"
+            >
+        </ImageView>
 
 </RelativeLayout>
