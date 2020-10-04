@@ -6,8 +6,8 @@ android {
         applicationId "com.babanomania.pdfscanner"
         minSdkVersion 24
         targetSdkVersion 29
-        versionCode 10
-        versionName "1.9.20200920"
+        versionCode 11
+        versionName "1.10.20201004"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
     buildTypes {

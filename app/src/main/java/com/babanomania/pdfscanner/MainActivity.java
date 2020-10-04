@@ -213,8 +213,11 @@ public class MainActivity extends AppCompatActivity {
 
                             pdfWriter.addBitmap(bitmap);
 
-                            String filename = "SCANNED_" + timestamp + ".pdf";
-                            FileIOUtils.writeFile( baseDirectory, filename, new FileWritingCallback() {
+                            String itemName = textValue.replaceAll("[^a-zA-Z0-9\\s]", "");
+                            String filename = timestamp + "-" +  itemName + ".pdf";
+
+                            FileIOUtils.mkdir(baseDirectory + "/" + category);
+                            FileIOUtils.writeFile( baseDirectory + "/" + category + "/", filename, new FileWritingCallback() {
                                 @Override
                                 public void write(FileOutputStream out) {
                                     try {
@@ -237,7 +240,7 @@ public class MainActivity extends AppCompatActivity {
                             Document newDocument = new Document();
                             newDocument.setName( textValue );
                             newDocument.setCategory( category );
-                            newDocument.setPath( filename );
+                            newDocument.setPath( category + "/" + filename );
                             newDocument.setScanned( timestampView );
                             newDocument.setPageCount( pdfWriter.getPageCount() );
                             viewModel.saveDocument(newDocument);
@@ -282,8 +285,11 @@ public class MainActivity extends AppCompatActivity {
                         pdfWriter.addFile(stagedFile);
                     }
 
-                    String filename = "SCANNED_" + timestamp + ".pdf";
-                    FileIOUtils.writeFile(baseDirectory, filename, new FileWritingCallback() {
+                    String itemName = textValue.replaceAll("[^a-zA-Z0-9\\s]", "");
+                    String filename = timestamp + "-" +  itemName + ".pdf";
+
+                    FileIOUtils.mkdir(baseDirectory + "/" + category + "/");
+                    FileIOUtils.writeFile(baseDirectory+ "/" + category + "/", filename, new FileWritingCallback() {
                         @Override
                         public void write(FileOutputStream out) {
                             try {
@@ -306,7 +312,7 @@ public class MainActivity extends AppCompatActivity {
                     Document newDocument = new Document();
                     newDocument.setName(textValue);
                     newDocument.setCategory(category);
-                    newDocument.setPath(filename);
+                    newDocument.setPath(category + "/" + filename);
                     newDocument.setScanned(timestampView);
                     newDocument.setPageCount(pdfWriter.getPageCount());
                     viewModel.saveDocument(newDocument);

@@ -72,4 +72,16 @@ public class FileIOUtils {
         out.close();
     }
 
+    public static void removeFile(  String filepath) {
+        final File sd = Environment.getExternalStorageDirectory();
+        File targetFile = new File( sd, filepath );
+        targetFile.delete();
+    }
+
+    public static void moveFile(  String oldFilepath, String newFilePath) {
+        final File sd = Environment.getExternalStorageDirectory();
+        File targetFile = new File( sd, oldFilepath );
+        targetFile.renameTo(new File(sd, newFilePath));
+    }
+
 }
