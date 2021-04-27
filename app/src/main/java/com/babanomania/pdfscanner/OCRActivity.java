@@ -24,7 +24,8 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class OCRActivity extends AppCompatActivity {
-
+    
+    //Declaring the necessary components
     public EditText ocrText;
     public Button shareButton;
     private ProgressBar progressBar;
@@ -35,6 +36,7 @@ public class OCRActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ocr);
 
+           //Connecting layout and navigation to java file
         RelativeLayout relativeLayout = findViewById(R.id.rl);
         UIUtil.setLightNavigationBar( relativeLayout, this );
 
@@ -62,6 +64,7 @@ public class OCRActivity extends AppCompatActivity {
                 }
         );
 
+           //Getting Extras
         Bundle bundle = getIntent().getExtras();
         final String filePath = bundle.getString(FILE_PATH);
         new OCRExtractTask( this, getApplicationContext(), filePath )
@@ -84,6 +87,7 @@ public class OCRActivity extends AppCompatActivity {
             this.filePath = filePath;
         }
 
+        //Bitmapping the image
         @Override
         protected String doInBackground(String... strings) {
             try {
