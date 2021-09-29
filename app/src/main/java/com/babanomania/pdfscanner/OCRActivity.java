@@ -2,6 +2,7 @@ package com.babanomania.pdfscanner;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.pdf.PdfRenderer;
 import android.os.AsyncTask;
@@ -33,6 +34,17 @@ public class OCRActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        SharedPreferences prefs = getSharedPreferences("save", MODE_PRIVATE);
+        boolean isDark = prefs.getBoolean("DarkMode", true);
+
+        if(isDark){
+            setTheme(R.style.AppThemeDark);
+        }
+        else {
+            setTheme(R.style.AppTheme);
+        }
+
         setContentView(R.layout.activity_ocr);
 
         RelativeLayout relativeLayout = findViewById(R.id.rl);

@@ -10,7 +10,29 @@
         <item name="android:windowActivityTransitions">true</item>
         <item name="android:windowEnterTransition">@transition/fade</item>
         <item name="android:windowExitTransition">@transition/fade</item>
+        <item name="background_color">@color/white</item>
+        <item name="text_color">@color/textColor</item>
+        <item name="android:itemBackground">@color/white</item>
+        <item name="alertDialogTheme">@style/AlertDialogLight</item>
+        <item name="android:textColorSecondary">@color/colorDark</item>
+    </style>
 
+    <!-- Dark mode theme -->
+    <style name="AppThemeDark" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">#FF3680</item>
+        <item name="android:textColor">@color/textColorDark</item>
+        <item name="actionModeBackground">@color/colorDark</item>
+        <item name="actionMenuTextColor">@android:color/white</item>
+        <item name="android:windowActivityTransitions">true</item>
+        <item name="android:windowEnterTransition">@transition/fade</item>
+        <item name="android:windowExitTransition">@transition/fade</item>
+        <item name="background_color">@color/colorDark</item>
+        <item name="text_color">@color/textColorDark</item>
+        <item name="android:itemBackground">@color/colorDark</item>
+        <item name="alertDialogTheme">@style/AlertDialogDark</item>
+        <item name="android:textColorSecondary">#e0e0e0</item>
     </style>
 
     <style name="AppThemeSearch" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -23,6 +45,21 @@
         <item name="android:windowActivityTransitions">true</item>
         <item name="android:windowEnterTransition">@transition/fade</item>
         <item name="android:windowExitTransition">@transition/slide</item>
+        <item name="background_color">@color/white</item>
+    </style>
+
+    <!-- Dark mode theme -->
+    <style name="AppThemeSearchDark" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@android:color/white</item>
+        <item name="android:textColor">@color/textColorDark</item>
+        <item name="actionModeBackground">@color/colorDark</item>
+        <item name="actionMenuTextColor">@color/colorPrimary</item>
+        <item name="android:windowActivityTransitions">true</item>
+        <item name="android:windowEnterTransition">@transition/fade</item>
+        <item name="android:windowExitTransition">@transition/slide</item>
+        <item name="background_color">@color/colorDark</item>
     </style>
 
     <style name="AppThemeSplash" parent="Theme.AppCompat.DayNight.NoActionBar">
@@ -34,6 +71,45 @@
         <item name="android:windowActivityTransitions">true</item>
         <item name="android:windowEnterTransition">@transition/fade</item>
         <item name="android:windowExitTransition">@transition/slide</item>
+    </style>
+
+    <!-- Dark mode theme -->
+    <style name="AppThemeSplashDark" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:navigationBarColor">@color/colorPrimary</item>
+        <item name="android:windowActivityTransitions">true</item>
+        <item name="android:windowEnterTransition">@transition/fade</item>
+        <item name="android:windowExitTransition">@transition/slide</item>
+    </style>
+
+
+<!--    Dialog themes-->
+
+    <style name="AlertDialogLight" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:background">@color/white</item>
+        <item name="android:textColor">@color/textColor</item>
+        <item name="textColorAlertDialogListItem">@color/textColor</item>
+        <item name="colorControlNormal">@color/textColor</item>
+        <item name="colorControlActivated">@color/textColor</item>
+        <item name="colorControlHighlight">@color/textColor</item>
+    </style>
+
+    <style name="AlertDialogDark" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:background">@color/colorDark</item>
+        <item name="android:textColor">@color/textColorDark</item>
+        <item name="textColorAlertDialogListItem">@color/white</item>
+        <item name="colorControlNormal">@color/white</item>
+        <item name="colorControlActivated">@color/textColorDark</item>
+        <item name="colorControlHighlight">@color/textColorDark</item>
+    </style>
+
+<!--    Dropdown styles-->
+    <style name="spinnerDropDownItemStyle" parent="android:TextAppearance.Widget.TextView.SpinnerItem">
+        <item name="android:textColor">?attr/text_color</item>
+        <item name="android:padding">10dp</item>
     </style>
 
 </resources>

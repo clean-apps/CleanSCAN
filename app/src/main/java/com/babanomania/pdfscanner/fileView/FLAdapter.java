@@ -46,6 +46,7 @@ public class FLAdapter extends RecyclerView.Adapter<FLViewHolder> {
     public boolean multiSelect = false;
     private List<Document> documentList = new ArrayList<>();
     public List<Document> selectedItems = new ArrayList<>();
+    public boolean isDark;
 
     private DocumentViewModel viewModel;
 
@@ -104,7 +105,7 @@ public class FLAdapter extends RecyclerView.Adapter<FLViewHolder> {
                 case R.id.menu_edit:
 
                     final Document docToRename = selectedItems.get(0);
-                    DialogUtil.askUserFilaname(context, docToRename.getName(), docToRename.getCategory(), new DialogUtilCallback() {
+                    DialogUtil.askUserFilaname(context, docToRename.getName(), docToRename.getCategory(),isDark, new DialogUtilCallback() {
 
                         @Override
                         public void onSave(String textValue, String category) {
@@ -163,9 +164,10 @@ public class FLAdapter extends RecyclerView.Adapter<FLViewHolder> {
         }
     };
 
-    public FLAdapter( DocumentViewModel viewModel, Context context ){
+    public FLAdapter( DocumentViewModel viewModel, Context context, boolean isDark ){
         this.viewModel = viewModel;
         this.context = context;
+        this.isDark = isDark;
     }
 
     public void setData(List<Document> documents){
@@ -180,7 +182,7 @@ public class FLAdapter extends RecyclerView.Adapter<FLViewHolder> {
 
         LayoutInflater layoutInflater = LayoutInflater.from(viewGroup.getContext());
         View listItem = layoutInflater.inflate( R.layout.file_item_view, viewGroup, false );
-        FLViewHolder viewHolder = new FLViewHolder(listItem, actionModeCallbacks, this );
+        FLViewHolder viewHolder = new FLViewHolder(listItem, actionModeCallbacks, this, isDark );
 
         return viewHolder;
     }

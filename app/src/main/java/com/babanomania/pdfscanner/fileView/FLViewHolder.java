@@ -1,6 +1,7 @@
 package com.babanomania.pdfscanner.fileView;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
@@ -33,10 +34,11 @@ public class FLViewHolder extends RecyclerView.ViewHolder {
     private ActionMode.Callback actionModeCallbacks;
     private FLAdapter adapter;
     private Document documnt;
+    private boolean isDark;
 
     private Map<String, Integer> categoryImageMap = new HashMap<>();
 
-    public FLViewHolder(View itemView, ActionMode.Callback actionModeCallbacks, FLAdapter adapter ) {
+    public FLViewHolder(View itemView, ActionMode.Callback actionModeCallbacks, FLAdapter adapter, boolean isDark ) {
         super(itemView);
         this.categoryIcon =  itemView.findViewById(R.id.imageView);
         this.textViewLabel = itemView.findViewById(R.id.fileName);
@@ -46,6 +48,7 @@ public class FLViewHolder extends RecyclerView.ViewHolder {
         this.itemLayout = itemView.findViewById(R.id.relativeLayout);
         this.adapter = adapter;
         this.actionModeCallbacks  = actionModeCallbacks;
+        this.isDark = isDark;
 
         categoryImageMap.put( "Others", R.drawable.ic_category_others );
         categoryImageMap.put( "Shopping", R.drawable.ic_category_shopping );
@@ -67,7 +70,18 @@ public class FLViewHolder extends RecyclerView.ViewHolder {
         if (this.adapter.multiSelect) {
             if (this.adapter.selectedItems.contains(item)) {
                 this.adapter.selectedItems.remove(item);
-                itemLayout.setBackgroundColor(Color.WHITE);
+//                itemLayout.setBackgroundColor(Color.WHITE);
+//                if dark                 itemLayout.setBackgroundColor(Color.DARK);
+//                else
+//                white
+
+                if(isDark){
+                    itemLayout.setBackgroundResource(R.color.colorDark);
+                }
+                else{
+                    itemLayout.setBackgroundColor(Color.WHITE);
+                }
+
 
             } else {
                 this.adapter.selectedItems.add(item);
@@ -94,11 +108,14 @@ public class FLViewHolder extends RecyclerView.ViewHolder {
         }
 
         if (adapter.selectedItems.contains(document)) {
-            itemLayout.setBackgroundColor(Color.LTGRAY);
-
+             itemLayout.setBackgroundColor(Color.LTGRAY);
         } else {
-            itemLayout.setBackgroundColor(Color.WHITE);
-
+            if(isDark){
+                itemLayout.setBackgroundResource(R.color.colorDark);
+            }
+            else{
+                itemLayout.setBackgroundColor(Color.WHITE);
+            }
         }
 
         Integer resourceId = categoryImageMap.get( document.getCategory() );

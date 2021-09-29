@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="?android:attr/listPreferredItemHeight"
     android:gravity="center"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:background="?attr/background_color">
 
     <ImageView
         android:id="@+id/imageView"
@@ -17,7 +18,8 @@
         android:adjustViewBounds="true"
         android:contentDescription="Icon"
         android:scaleType="centerInside"
-        app:srcCompat="@drawable/ic_category_receipt" />
+        app:srcCompat="@drawable/ic_category_receipt"
+        android:backgroundTint="@color/blue"/>
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -7,4 +7,6 @@
     <color name="colorAccent">#8A1C44</color>
     <color name="white">#ffffff</color>
     <color name="tab_indicator_gray">#c0c0c0</color>
+    <color name="colorDark">#393939</color>
+    <color name="textColorDark">#FF3680</color>
 </resources>
