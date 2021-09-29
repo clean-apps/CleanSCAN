@@ -6,6 +6,7 @@ import android.app.ActivityOptions;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.icu.text.SimpleDateFormat;
@@ -21,6 +22,7 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -71,6 +73,17 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        SharedPreferences prefs = getSharedPreferences("save", MODE_PRIVATE);
+        boolean isDark = prefs.getBoolean("DarkMode", true);
+
+        if(isDark){
+            setTheme(R.style.AppThemeDark);
+        }
+        else {
+            setTheme(R.style.AppTheme);
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -92,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
 
         viewModel = ViewModelProviders.of(this).get(DocumentViewModel.class);
 
-        fileAdapter = new FLAdapter( viewModel, this);
+        fileAdapter = new FLAdapter( viewModel, this, isDark);
         recyclerView.setAdapter( fileAdapter );
 
         liveData = viewModel.getAllDocuments();
@@ -166,6 +179,8 @@ public class MainActivity extends AppCompatActivity {
 //    }
 
     private void saveBitmap( final Bitmap bitmap, final boolean addMore ){
+        SharedPreferences prefs = getSharedPreferences("save", MODE_PRIVATE);
+        boolean isDark = prefs.getBoolean("DarkMode", true);
 
         final String baseDirectory =  getApplicationContext().getString( addMore ? R.string.base_staging_path : R.string.base_storage_path);
             final File sd = Environment.getExternalStorageDirectory();
@@ -195,7 +210,7 @@ public class MainActivity extends AppCompatActivity {
 
             } else {
 
-                DialogUtil.askUserFilaname( c, null, null, new DialogUtilCallback() {
+                DialogUtil.askUserFilaname( c, null, null, isDark, new DialogUtilCallback() {
 
                     @Override
                     public void onSave(String textValue, String category) {
@@ -262,6 +277,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void savePdf() {
+        SharedPreferences prefs = getSharedPreferences("save", MODE_PRIVATE);
+        boolean isDark = prefs.getBoolean("DarkMode", true);
 
         final String baseDirectory = getApplicationContext().getString(R.string.base_storage_path);
         final File sd = Environment.getExternalStorageDirectory();
@@ -270,7 +287,7 @@ public class MainActivity extends AppCompatActivity {
         final String timestamp = simpleDateFormat.format(new Date());
 
 
-        DialogUtil.askUserFilaname(c, null, null, new DialogUtilCallback() {
+        DialogUtil.askUserFilaname(c, null, null, isDark, new DialogUtilCallback() {
 
             @Override
             public void onSave(String textValue, String category) {

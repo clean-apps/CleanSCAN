@@ -1,9 +1,44 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?attr/background_color">
+
+
 
     <FrameLayout
         android:id="@+id/settings"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-</LinearLayout>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/dark_mode_title"
+        android:layout_width="150dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="135dp"
+        android:paddingLeft="72dp"
+        android:text="Dark Mode"
+        android:textSize="14dp" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/bt_switch"
+        android:layout_width="68dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="305dp"
+        android:layout_marginTop="131dp"
+        android:paddingRight="5dp" />
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="134dp"
+        android:layout_marginEnd="369dp"
+        android:layout_marginBottom="447dp"
+        app:srcCompat="@drawable/ic_baseline_bedtime_24"/>
+
+</RelativeLayout>

@@ -3,6 +3,7 @@ package com.babanomania.pdfscanner;
 import android.app.SearchManager;
 import android.app.SearchableInfo;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,6 +12,7 @@ import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SearchView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -33,6 +35,20 @@ public class SearchableActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
+        SharedPreferences prefs = getSharedPreferences("save", MODE_PRIVATE);
+        boolean isDark = prefs.getBoolean("DarkMode", true);
+
+        if(isDark){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            setTheme(R.style.AppThemeSearchDark);
+        }
+        else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            setTheme(R.style.AppThemeSearch);
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_searchable);
 
@@ -44,7 +60,7 @@ public class SearchableActivity extends AppCompatActivity {
 
         DocumentViewModel viewModel = ViewModelProviders.of(this).get(DocumentViewModel.class);
 
-        final FLAdapter fileAdapter = new FLAdapter( viewModel, this);
+        final FLAdapter fileAdapter = new FLAdapter( viewModel, this, isDark);
         recyclerView.setAdapter( fileAdapter );
 
         this.emptyLayout = findViewById(R.id.empty_search_list);
@@ -77,6 +93,9 @@ public class SearchableActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
+        SharedPreferences prefs = getSharedPreferences("save", MODE_PRIVATE);
+        final boolean isDark = prefs.getBoolean("DarkMode", true);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getMenuInflater().inflate(R.menu.searchview_menu, menu);
 
@@ -100,7 +119,7 @@ public class SearchableActivity extends AppCompatActivity {
 
                     @Override
                     public boolean onQueryTextChange(String newText) {
-                        doMySearch( newText );
+                        doMySearch( newText, isDark);
                         return false;
                     }
                 });
@@ -108,7 +127,7 @@ public class SearchableActivity extends AppCompatActivity {
         return true;
     }
 
-    public void doMySearch( String query ){
+    public void doMySearch( String query, boolean isDark ){
 
         this.recyclerView = findViewById(R.id.rwSearch);
 
@@ -116,7 +135,7 @@ public class SearchableActivity extends AppCompatActivity {
 
         DocumentViewModel viewModel = ViewModelProviders.of(this).get(DocumentViewModel.class);
 
-        final FLAdapter fileAdapter = new FLAdapter( viewModel, this);
+        final FLAdapter fileAdapter = new FLAdapter( viewModel, this, isDark);
         recyclerView.setAdapter( fileAdapter );
 
         viewModel.search( '%' + query + '%').observe(this, new Observer<List<Document>>() {

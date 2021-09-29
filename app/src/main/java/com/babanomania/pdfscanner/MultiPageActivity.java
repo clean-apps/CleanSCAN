@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.DataSetObserver;
 import android.graphics.Bitmap;
@@ -48,6 +49,17 @@ public class MultiPageActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        SharedPreferences prefs = getSharedPreferences("save", MODE_PRIVATE);
+        boolean isDark = prefs.getBoolean("DarkMode", true);
+
+        if(isDark){
+            setTheme(R.style.AppThemeDark);
+        }
+        else {
+            setTheme(R.style.AppTheme);
+        }
+
         setContentView(R.layout.activity_multi_page);
 
         setTitle( getResources().getString(R.string.multi_page_title) );

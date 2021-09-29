@@ -9,7 +9,9 @@
             app:entryValues="@array/image_quality_values"
             app:key="@string/key_image_quality"
             app:title="@string/image_quality_title"
-            app:useSimpleSummaryProvider="true" />
+            app:useSimpleSummaryProvider="true"
+
+            />
 
     </PreferenceCategory>
 

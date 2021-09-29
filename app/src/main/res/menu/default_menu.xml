@@ -7,12 +7,13 @@
         android:iconTint="@android:color/white"
         android:onClick="goToSearch"
         android:title="@string/menu_search"
-        app:showAsAction="always"/>
+        app:showAsAction="always"
+        />
 
     <item android:id="@+id/show_prefrences"
         android:iconTint="@android:color/white"
         android:onClick="goToPreferences"
         android:title="@string/menu_settings"
-        app:showAsAction="never"/>
+        app:showAsAction="never" />
 
 </menu>

@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="?attr/background_color">
 
     <TextView
         android:id="@+id/dialogTitle"
@@ -22,7 +23,8 @@
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="20dp" />
+        android:layout_height="20dp"
+        />
 
     <TextView
         android:id="@+id/dialogCategory"

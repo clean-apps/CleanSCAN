@@ -13,11 +13,11 @@ import com.babanomania.pdfscanner.R;
 
 public class DialogUtil {
 
-    public static void askUserFilaname( Context context, String promptFileName, String promptCategory, final DialogUtilCallback callback ){
+    public static void askUserFilaname( Context context, String promptFileName, String promptCategory, boolean isDark, final DialogUtilCallback callback ){
 
         LayoutInflater layoutInflaterAndroid = LayoutInflater.from(context);
         View mView = layoutInflaterAndroid.inflate(R.layout.file_input_dialog_box, null);
-        AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(context);
+        AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(context, isDark ? R.style.AlertDialogDark : R.style.AlertDialogLight);
         alertDialogBuilderUserInput.setView(mView);
 
         final EditText fileNameText = mView.findViewById(R.id.userInputDialog);
@@ -27,7 +27,7 @@ public class DialogUtil {
 
         final Spinner categorySelection = mView.findViewById(R.id.userInputCategory);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context, R.array.category_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(R.layout.layout_spinner);
         categorySelection.setAdapter(adapter);
 
         if( promptCategory != null ){

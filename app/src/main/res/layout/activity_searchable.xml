@@ -4,13 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SearchableActivity">
+    tools:context=".SearchableActivity"
+    android:background="?attr/background_color">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rwSearch"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/empty_search_list">
+        android:layout_below="@+id/empty_search_list"
+       >
 
     </androidx.recyclerview.widget.RecyclerView>
 
