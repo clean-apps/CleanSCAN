@@ -11,7 +11,7 @@ Clean Scan is a mobile document scanner, easily digitize your paper documents in
 
 ### <img src="https://use.fontawesome.com/releases/v5.1.0/svgs/solid/file-pdf.svg" width="22" align="left" /> &nbsp; Create PDFs from Documents
 
-Easily convet yout paper document into a digitized into a PDF file, looking sharp and clean.
+Easily convert yout paper document into a digitized into a PDF file, looking sharp and clean.
 
 ### <img src="https://use.fontawesome.com/releases/v5.1.0/svgs/solid/th-list.svg" width="22" align="left" /> &nbsp; Organize like a pro
 
