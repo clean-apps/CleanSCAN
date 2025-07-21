@@ -9,6 +9,9 @@ android {
         versionCode 11
         versionName "1.10.20201004"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+        ndk {
+    abiFilters 'armeabi-v7a', 'arm64-v8a' // Optional: keep app smaller
+        }
     }
     buildTypes {
         release {
@@ -30,7 +33,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
     implementation project(':scanlibrary')
-
+    
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
@@ -40,6 +43,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel:2.2.0'
 
+    implementation 'com.google.code.tesseract.android:tess-two:9.1.0'
     implementation 'com.google.android.gms:play-services-vision:20.1.2'
     implementation 'com.google.firebase:firebase-core:17.5.0'
     implementation 'com.google.firebase:firebase-ml-vision:24.1.0'
